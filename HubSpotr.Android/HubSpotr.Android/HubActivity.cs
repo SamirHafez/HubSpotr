@@ -39,9 +39,11 @@ namespace HubSpotr.Android
             new AlertDialog.Builder(this)
                            .SetTitle("Leaving")
                            .SetMessage("You are about to leave this hub")
-                           .SetPositiveButton("OK", (o, e) =>
-                                   CommonData.Hub.Leave()
-                                      .ContinueWith(task => RunOnUiThread(this.Finish)))
+                           .SetPositiveButton("OK", async (o, e) =>
+                               {
+                                   await CommonData.Hub.Leave();
+                                   this.Finish();
+                               })
                            .SetNegativeButton("Cancel", (o, e) => { })
                            .Show();
         }
@@ -134,9 +136,11 @@ namespace HubSpotr.Android
                                .SetTitle("Sorry")
                                .SetMessage("You fell out of this hubs range")
                                .SetCancelable(false)
-                               .SetPositiveButton("Leave", (o, e) =>
-                                   CommonData.Hub.Leave()
-                                      .ContinueWith(task => RunOnUiThread(this.Finish)))
+                               .SetPositiveButton("Leave", async (o, e) =>
+                                   {
+                                       await CommonData.Hub.Leave();
+                                       this.Finish();
+                                   })
                                .Show();
         }
 

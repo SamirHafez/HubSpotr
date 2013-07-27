@@ -6,11 +6,9 @@ namespace HubSpotr.Core.Extensions
 {
     public static class PostExtensions
     {
-        private static MobileServiceClient mobileService = AzureContext.Client;
-
         public static Task Post(this Post post)
         {
-            IMobileServiceTable<Post> posts = mobileService.GetTable<Post>();
+            IMobileServiceTable<Post> posts = AzureContext.Client.GetTable<Post>();
 
             return posts.InsertAsync(post);
         }

@@ -26,9 +26,7 @@ namespace HubSpotr.Android
         {
             try
             {
-                var client = AzureContext.Client;
-
-                MobileServiceUser user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Facebook);
+                MobileServiceUser user = await AzureContext.Client.LoginAsync(this, MobileServiceAuthenticationProvider.Facebook);
 
                 CommonData.User = user;
 

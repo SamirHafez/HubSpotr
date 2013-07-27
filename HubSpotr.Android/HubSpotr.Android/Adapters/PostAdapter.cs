@@ -30,7 +30,6 @@ namespace HubSpotr.Android.Adapters
             timer.Interval = 2000;
             timer.Elapsed += OnTimedEvent;
 
-            //LoadPosts();
             timer.Start();
         }
 

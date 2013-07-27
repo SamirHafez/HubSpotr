@@ -22,15 +22,12 @@ namespace HubSpotr.Android
                 StartActivity(typeof(LoginActivity));
 
             string token = userSettings.GetString("token", string.Empty);
+            var json = new JsonObject();
+            json.Add("access_token", JsonValue.CreateStringValue(token));
 
             try
             {
-                var client = AzureContext.Client;
-
-                var json = new JsonObject();
-                json.Add("access_token", JsonValue.CreateStringValue(token));
-
-                MobileServiceUser user = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Facebook, json);
+                MobileServiceUser user = await AzureContext.Client.LoginAsync(this, MobileServiceAuthenticationProvider.Facebook, json);
 
                 CommonData.User = user;
                 StartActivity(typeof(DiscoveryActivity));
@@ -39,7 +36,7 @@ namespace HubSpotr.Android
             {
                 new AlertDialog.Builder(this)
                                .SetTitle("Error")
-                               .SetMessage("Authentication failed. Redirecting to login")
+                               .SetMessage("Authentication failed. Try to login again")
                                .SetCancelable(false)
                                .SetPositiveButton("OK", (o, a) => StartActivity(typeof(LoginActivity)))
                                .Show();
