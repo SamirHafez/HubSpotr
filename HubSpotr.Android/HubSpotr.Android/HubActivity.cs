@@ -6,6 +6,7 @@ using HubSpotr.Android.Adapters;
 using HubSpotr.Core.Extensions;
 using HubSpotr.Core.Model;
 using System.Linq;
+using System.Timers;
 
 namespace HubSpotr.Android
 {
@@ -34,23 +35,38 @@ namespace HubSpotr.Android
             }
         }
 
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            InitializeLocation();
+            //this.postAdapter.timer.Start();
+        }
+
+        protected override void OnPause()
+        {
+            base.OnPause();
+
+            this.locationManager.RemoveUpdates(this);
+            //this.postAdapter.timer.Stop();
+        }
+
         public override void OnBackPressed()
         {
             new AlertDialog.Builder(this)
                            .SetTitle("Leaving")
                            .SetMessage("You are about to leave this hub")
-                           .SetPositiveButton("OK", async (o, e) =>
-                               {
-                                   await CommonData.Hub.Leave();
-                                   this.Finish();
-                               })
+                           .SetPositiveButton("OK", async (o, e) => 
+                           {
+                               await CommonData.Hub.Leave();
+                               this.Finish(); 
+                           })
                            .SetNegativeButton("Cancel", (o, e) => { })
                            .Show();
         }
 
         private void JoinSucceded()
         {
-            InitializeLocation();
             InitializeHubView();
             InitializeAdapters();
             InitializeInput();
@@ -156,20 +172,6 @@ namespace HubSpotr.Android
         { }
 
         #endregion
-
-        protected override void OnResume()
-        {
-            base.OnResume();
-            InitializeLocation();
-            //this.postAdapter.timer.Start();
-        }
-
-        protected override void OnPause()
-        {
-            base.OnPause();
-            this.locationManager.RemoveUpdates(this);
-            //this.postAdapter.timer.Stop();
-        }
     }
 }
 

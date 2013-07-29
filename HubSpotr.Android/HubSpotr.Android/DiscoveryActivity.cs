@@ -30,7 +30,18 @@ namespace HubSpotr.Android
             this.progress.Visibility = ViewStates.Visible;
 
             InitializeAdapters();
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
             InitializeLocation();
+        }
+
+        protected override void OnPause()
+        {
+            base.OnPause();
+            this.locationManager.RemoveUpdates(this);
         }
 
         private void InitializeLocation()

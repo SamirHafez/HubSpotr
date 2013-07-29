@@ -20,26 +20,28 @@ namespace HubSpotr.Android
 
             if (!userSettings.Contains("token"))
                 StartActivity(typeof(LoginActivity));
-
-            string token = userSettings.GetString("token", string.Empty);
-            var json = new JsonObject();
-            json.Add("access_token", JsonValue.CreateStringValue(token));
-
-            try
+            else
             {
-                MobileServiceUser user = await AzureContext.Client.LoginAsync(this, MobileServiceAuthenticationProvider.Facebook, json);
+                string token = userSettings.GetString("token", string.Empty);
+                var json = new JsonObject();
+                json.Add("access_token", JsonValue.CreateStringValue(token));
 
-                CommonData.User = user;
-                StartActivity(typeof(DiscoveryActivity));
-            }
-            catch
-            {
-                new AlertDialog.Builder(this)
-                               .SetTitle("Error")
-                               .SetMessage("Authentication failed. Try to login again")
-                               .SetCancelable(false)
-                               .SetPositiveButton("OK", (o, a) => StartActivity(typeof(LoginActivity)))
-                               .Show();
+                try
+                {
+                    MobileServiceUser user = await AzureContext.Client.LoginAsync(this, MobileServiceAuthenticationProvider.Facebook, json);
+
+                    CommonData.User = user;
+                    StartActivity(typeof(DiscoveryActivity));
+                }
+                catch
+                {
+                    new AlertDialog.Builder(this)
+                                   .SetTitle("Error")
+                                   .SetMessage("Authentication failed. Try to login again")
+                                   .SetCancelable(false)
+                                   .SetPositiveButton("OK", (o, a) => StartActivity(typeof(LoginActivity)))
+                                   .Show();
+                }
             }
         }
     }

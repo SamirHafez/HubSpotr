@@ -35,34 +35,22 @@ namespace HubSpotr.Android.Adapters
 
         private async void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-            Post latest = this.posts.OrderByDescending(p => p.At).FirstOrDefault();
-
             timer.Stop();
 
-            if (latest != null)
+            Post latest = this.posts.OrderByDescending(p => p.At).FirstOrDefault();
+
+            List<Post> newPosts;
+
+            newPosts = latest != null ? await this.hub.NewPosts(posts.OrderByDescending(p => p.At).First().At) :
+                                        await this.hub.Posts();
+
+            if (newPosts.Count > 0)
             {
-                List<Post> newPosts = await this.hub.NewPosts(posts.OrderByDescending(p => p.At).First().At);
-
-                if (newPosts.Count > 0)
-                {
-                    this.posts.InsertRange(0, newPosts);
-                    this.NotifyDataSetChanged();
-                }
-
-                timer.Start();
+                this.posts.InsertRange(0, newPosts);
+                this.activity.RunOnUiThread(() => this.NotifyDataSetChanged());
             }
-            else
-            {
-                List<Post> postList = await this.hub.Posts();
 
-                if (postList.Count > 0)
-                {
-                    this.posts.InsertRange(0, postList);
-                    this.NotifyDataSetChanged();
-                }
-
-                timer.Start();
-            }
+            timer.Start();
         }
 
         public Task Add(Post post)
