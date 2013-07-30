@@ -101,9 +101,12 @@ namespace HubSpotr.Android
             {
                 var post = new Post
                 {
-                    Message = messageBox.Text,
+                    Message = messageBox.Text.Trim(),
                     HubId = CommonData.Hub.Id
                 };
+
+                if (post.Message == string.Empty)
+                    return;
 
                 this.postAdapter.Add(post);
 

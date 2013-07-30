@@ -94,17 +94,17 @@ namespace HubSpotr.Android
 			// aapt resource value: 0x7f060002
 			public const int postButton = 2131099650;
 			
+			// aapt resource value: 0x7f06000c
+			public const int postItemDate = 2131099660;
+			
 			// aapt resource value: 0x7f06000b
-			public const int postItemDate = 2131099659;
+			public const int postItemMessage = 2131099659;
 			
 			// aapt resource value: 0x7f06000a
-			public const int postItemMessage = 2131099658;
+			public const int postItemOwner = 2131099658;
 			
 			// aapt resource value: 0x7f060009
-			public const int postItemOwner = 2131099657;
-			
-			// aapt resource value: 0x7f06000c
-			public const int postItemPicture = 2131099660;
+			public const int postItemPicture = 2131099657;
 			
 			// aapt resource value: 0x7f060001
 			public const int postText = 2131099649;

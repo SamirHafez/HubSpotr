@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
+    android:minWidth="25px"
+    android:minHeight="25px"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <TextView
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/postItemOwner" />
-    <TextView
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/postItemMessage" />
-    <TextView
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/postItemDate" />
     <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_gallery"
+        android:layout_width="60.0dp"
+        android:layout_height="fill_parent"
         android:id="@+id/postItemPicture" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <TextView
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/postItemOwner" />
+        <TextView
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/postItemMessage" />
+        <TextView
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/postItemDate" />
+    </LinearLayout>
 </LinearLayout>
