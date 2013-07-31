@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ApplicationName">HubSpotr</string>
+
+    <string name="app_name">HubSpot</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="Button_LoginFace">Login with FaceBook</string>
+    <string name="HL_HeaderTxt">Locating your HUB</string>
+    <string name="HL_SubHeaderTXT">Hub Name</string>
+
 </resources>

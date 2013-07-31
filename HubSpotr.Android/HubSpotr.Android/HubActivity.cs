@@ -10,7 +10,7 @@ using System.Timers;
 
 namespace HubSpotr.Android
 {
-    [Activity(Label = "HubSpotr", Icon = "@drawable/HubSpot")]
+    [Activity(Label = "HubSpotr", Icon = "@drawable/ic_launcher")]
     public class HubActivity : Activity, ILocationListener
     {
         private PostAdapter postAdapter;

@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace HubSpotr.Android
 {
-    [Activity(Label = "HubSpotr", Icon = "@drawable/HubSpot")]
+    [Activity(Label = "HubSpotr", Icon = "@drawable/ic_launcher")]
     public class DiscoveryActivity : Activity, ILocationListener
     {
         private HubAdapter hubAdapter;

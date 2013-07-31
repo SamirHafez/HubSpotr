@@ -55,7 +55,6 @@
     <Compile Include="CommonData.cs" />
     <Compile Include="DiscoveryActivity.cs" />
     <Compile Include="HubActivity.cs" />
-    <Compile Include="LoginActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SplashActivity.cs" />
@@ -66,7 +65,6 @@
     <AndroidResource Include="Resources\Layout\Hub.axml" />
     <AndroidResource Include="Resources\Layout\HubDiscovery.axml" />
     <AndroidResource Include="Resources\Layout\HubItem.axml" />
-    <AndroidResource Include="Resources\Layout\Login.axml" />
     <AndroidResource Include="Resources\Layout\PostItem.axml" />
     <AndroidResource Include="Resources\Layout\Splash.axml" />
   </ItemGroup>
@@ -74,11 +72,23 @@
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Properties\AndroidManifest.xml" />
-    <AndroidResource Include="Resources\Drawable\HubSpot.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\background.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\bubspot_04.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\hubspot_splash.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icon_train.png" />
+    <AndroidResource Include="Resources\drawable-large\hubspot_splash.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\hubspot_splash.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\drawable-port\hubspot_splash.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\hubspot_splash.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\hubspot_splash.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\Values\colors.xml" />
+    <AndroidResource Include="Resources\Values\attrs.xml" />
+    <AndroidResource Include="Resources\Values\styles.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HubSpotr.Android.Core\HubSpotr.Android.Core.csproj">
