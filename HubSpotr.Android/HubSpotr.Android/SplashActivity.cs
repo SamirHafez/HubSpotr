@@ -1,5 +1,6 @@
 using Android.App;
 using Android.Content;
+using Android.Net;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
@@ -29,45 +30,61 @@ namespace HubSpotr.Android
 
             facebookLoginButton.Visibility = ViewStates.Invisible;
             facebookLoginButton.Click += NewLogin;
+        }
 
-            if (!await LoginExisting())
+        protected override void OnResume()
+        {
+            base.OnResume();
+            CheckRequirements();
+
+            if (LoginExisting())
+                StartActivity(typeof(DiscoveryActivity));
+            else
             {
+                Button facebookLoginButton = FindViewById<Button>(Resource.Id.button_LoginFace);
+                ProgressBar progressBar = FindViewById<ProgressBar>(Resource.Id.splashProgress);
+
                 progressBar.Visibility = ViewStates.Invisible;
                 facebookLoginButton.Visibility = ViewStates.Visible;
             }
         }
 
-        private async Task<bool> LoginExisting()
+
+        private bool CheckRequirements()
+        {
+            var conManager = (ConnectivityManager)GetSystemService(Context.ConnectivityService);
+
+            if (!conManager.GetNetworkInfo(ConnectivityType.Mobile).IsConnected &&
+                !conManager.GetNetworkInfo(ConnectivityType.Wifi).IsConnected)
+            {
+                new AlertDialog.Builder(this)
+                               .SetTitle("Sorry")
+                               .SetMessage("HubSpotr requires an internet connection to function")
+                               .SetCancelable(false)
+                               .SetPositiveButton("OK", (o, a) => Finish())
+                               .Show();
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool LoginExisting()
         {
             ISharedPreferences userSettings = GetSharedPreferences("user", FileCreationMode.Private);
 
             if (!userSettings.Contains("token"))
                 return false;
 
+            string id = userSettings.GetString("id", string.Empty);
             string token = userSettings.GetString("token", string.Empty);
-            var json = new JsonObject();
-            json.Add("access_token", JsonValue.CreateStringValue(token));
 
-            try
+            AzureContext.Client.CurrentUser = new MobileServiceUser(id)
             {
-                MobileServiceUser user = await AzureContext.Client.LoginAsync(this, MobileServiceAuthenticationProvider.Facebook, json);
+                MobileServiceAuthenticationToken = token
+            };
 
-                CommonData.User = user;
-                StartActivity(typeof(DiscoveryActivity));
-
-                return true;
-            }
-            catch(Exception e)
-            {
-                new AlertDialog.Builder(this)
-                               .SetTitle("Error")
-                               .SetMessage("Authentication failed. Try to login again")
-                               .SetCancelable(false)
-                               .SetPositiveButton("OK", (o, a) => { })
-                               .Show();
-
-                return false;
-            }
+            return true;
         }
 
         private async void NewLogin(object sender, System.EventArgs e)
@@ -75,8 +92,6 @@ namespace HubSpotr.Android
             try
             {
                 MobileServiceUser user = await AzureContext.Client.LoginAsync(this, MobileServiceAuthenticationProvider.Facebook);
-
-                CommonData.User = user;
 
                 ISharedPreferences userSettings = GetSharedPreferences("user", FileCreationMode.Private);
 

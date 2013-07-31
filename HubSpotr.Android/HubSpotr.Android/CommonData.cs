@@ -5,7 +5,6 @@ namespace HubSpotr.Android
 {
     public static class CommonData
     {
-        public static MobileServiceUser User { get; set; }
         public static Hub Hub { get; set; }
     }
 }
