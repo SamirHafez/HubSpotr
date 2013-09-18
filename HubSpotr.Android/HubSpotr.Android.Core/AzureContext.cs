@@ -10,7 +10,7 @@ namespace HubSpotr.Core
         {
             get
             {
-                return client ?? (client = new MobileServiceClient("http://hubspot.azure-mobile.net/", "LGxVOIjsExmFuFbBRRSrkmGHXEosZP55"));
+                return client ?? (client = new MobileServiceClient("https://hubspot.azure-mobile.net/", "LGxVOIjsExmFuFbBRRSrkmGHXEosZP55"));
             }
         }
     }

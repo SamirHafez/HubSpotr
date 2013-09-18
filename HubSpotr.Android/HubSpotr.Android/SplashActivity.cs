@@ -15,7 +15,7 @@ namespace HubSpotr.Android
     [Activity(Label = "HubSpotr", MainLauncher = true, NoHistory = true, Icon = "@drawable/ic_launcher")]
     public class SplashActivity : Activity
     {
-        protected async override void OnCreate(Bundle bundle)
+        protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 

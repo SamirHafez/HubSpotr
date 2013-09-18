@@ -56,10 +56,10 @@ namespace HubSpotr.Android
             new AlertDialog.Builder(this)
                            .SetTitle("Leaving")
                            .SetMessage("You are about to leave this hub")
-                           .SetPositiveButton("OK", async (o, e) => 
+                           .SetPositiveButton("OK", async (o, e) =>
                            {
                                await CommonData.Hub.Leave();
-                               this.Finish(); 
+                               this.Finish();
                            })
                            .SetNegativeButton("Cancel", (o, e) => { })
                            .Show();
@@ -75,11 +75,11 @@ namespace HubSpotr.Android
         private void JoinFailed()
         {
             new AlertDialog.Builder(this)
-                               .SetTitle("Failed to join")
-                               .SetMessage("Please try again")
-                               .SetCancelable(false)
-                               .SetPositiveButton("Leave", (o, e) => this.Finish())
-                               .Show();
+                           .SetTitle("Failed to join")
+                           .SetMessage("Please try again")
+                           .SetCancelable(false)
+                           .SetPositiveButton("Leave", (o, e) => this.Finish())
+                           .Show();
         }
 
         #region INITIALIZATION

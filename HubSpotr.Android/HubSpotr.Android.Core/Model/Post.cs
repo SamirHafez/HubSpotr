@@ -3,8 +3,10 @@ using System.Runtime.Serialization;
 
 namespace HubSpotr.Core.Model
 {
+    [DataContract]
     public sealed class Post
     {
+        [DataMember(Name = "id")]
         public int Id { get; set; }
 
         [DataMember(Name = "hubId")]
