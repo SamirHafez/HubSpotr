@@ -9,6 +9,8 @@ using System.Device.Location;
 using System.Collections.Generic;
 using System.Windows;
 using System.Threading;
+using System.Windows.Navigation;
+using System.ComponentModel;
 
 namespace HubSpotr.WindowsPhone
 {
@@ -32,10 +34,29 @@ namespace HubSpotr.WindowsPhone
             this.coordinateWatcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
             this.coordinateWatcher.PositionChanged += coordinateWatcher_PositionChanged;
             this.coordinateWatcher.StatusChanged += coordinateWatcher_StatusChanged;
+        }
+
+        private async void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            List<Post> posts = await this.hub.Posts();
+
+            this.posts = new ObservableCollection<Post>(posts);
+
+            lb1.ItemsSource = this.posts;
+
+            this.timer = new Timer(OnTimedEvent, null, 0, 2000);
+
             this.coordinateWatcher.Start();
         }
 
-        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            this.coordinateWatcher.Stop();
+
+            base.OnNavigatedFrom(e);
+        }
+
+        protected override void OnBackKeyPress(CancelEventArgs e)
         {
             MessageBoxResult response = MessageBox.Show("You are about to leave this hub", "Leaving", MessageBoxButton.OK);
 
@@ -49,19 +70,11 @@ namespace HubSpotr.WindowsPhone
         {
             List<Post> newPosts = await this.hub.NewPosts(this.posts.OrderByDescending(p => p.At).First().At);
 
-            foreach (var post in newPosts)
-                await Dispatcher.InvokeAsync(() => this.posts.Insert(0, post));
-        }
-
-        private async void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            List<Post> posts = await this.hub.Posts();
-
-            this.posts = new ObservableCollection<Post>(posts);
-
-            lb1.ItemsSource = this.posts;
-
-            this.timer = new Timer(OnTimedEvent, null, 0, 2000);
+            Dispatcher.BeginInvoke(() =>
+            {
+                foreach (var post in newPosts)
+                    this.posts.Insert(0, post);
+            });
         }
 
         private void coordinateWatcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
@@ -76,6 +89,7 @@ namespace HubSpotr.WindowsPhone
 
             if (distanceToHubCenter > this.hub.Radius)
             {
+                this.coordinateWatcher.Stop();
                 MessageBox.Show("You fell out of this hubs range", "Sorry", MessageBoxButton.OK);
                 NavigationService.GoBack();
             }
@@ -88,13 +102,11 @@ namespace HubSpotr.WindowsPhone
             if (message == null || (message = message.Trim()) == string.Empty)
                 return;
 
-            var post = new Post
+            new Post
             {
                 HubId = this.hub.Id,
                 Message = message
-            };
-
-            post.Post();
+            }.Post();
         }
     }
 }

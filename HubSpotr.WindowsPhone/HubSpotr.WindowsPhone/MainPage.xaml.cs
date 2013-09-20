@@ -5,6 +5,7 @@ using Microsoft.WindowsAzure.MobileServices;
 using System;
 using System.IO.IsolatedStorage;
 using System.Windows;
+using System.Windows.Navigation;
 
 namespace HubSpotr.WindowsPhone
 {
@@ -15,17 +16,24 @@ namespace HubSpotr.WindowsPhone
             InitializeComponent();
         }
 
-        private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (!DeviceNetworkInformation.IsNetworkAvailable)
             {
                 MessageBox.Show("HubSpotr requires an internet connection", "Sorry", MessageBoxButton.OK);
+                try
+                {
+                    NavigationService.RemoveBackEntry();
+                }
+                catch (InvalidOperationException) { }
                 NavigationService.GoBack();
                 return;
             }
 
             if (LoginExisting())
                 NavigationService.Navigate(new Uri("/DiscoveryPage.xaml", UriKind.Relative));
+
+            base.OnNavigatedTo(e);
         }
 
 

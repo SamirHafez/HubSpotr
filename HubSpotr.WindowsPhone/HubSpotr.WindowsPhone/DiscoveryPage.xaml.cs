@@ -5,7 +5,11 @@ using Microsoft.Phone.Shell;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Device.Location;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Navigation;
 
 
 namespace HubSpotr.WindowsPhone
@@ -26,7 +30,34 @@ namespace HubSpotr.WindowsPhone
             this.coordinateWatcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
             this.coordinateWatcher.PositionChanged += coordinateWatcher_PositionChanged;
             this.coordinateWatcher.StatusChanged += coordinateWatcher_StatusChanged;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
             this.coordinateWatcher.Start();
+            base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            this.coordinateWatcher.Stop();
+            base.OnNavigatedFrom(e);
+        }
+
+        protected override void OnBackKeyPress(CancelEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to leave?", "Confirm", MessageBoxButton.OKCancel);
+
+            if (result != MessageBoxResult.OK)
+                e.Cancel = true;
+            else
+                try
+                {
+                    NavigationService.RemoveBackEntry();
+                }
+                catch (InvalidOperationException) { }
+
+            base.OnBackKeyPress(e);
         }
 
         private void coordinateWatcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
@@ -55,12 +86,14 @@ namespace HubSpotr.WindowsPhone
                 this.hubs.Add(hub);
         }
 
-        private void lb1_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void lb1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if(e.AddedItems.Count != 1)
+                return;
+
             var selected = (Hub)e.AddedItems[0];
 
             PhoneApplicationService.Current.State["hub"] = selected;
-            this.coordinateWatcher.Stop();
             NavigationService.Navigate(new Uri("/HubPage.xaml", UriKind.Relative));
         }
 
