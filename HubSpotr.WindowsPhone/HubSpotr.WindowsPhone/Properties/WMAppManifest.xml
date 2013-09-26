@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
-  <App xmlns="" ProductID="{9a93943f-9de8-41ec-ad38-a29e345fd5c1}" Title="HubSpotr" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="HubSpotr.WindowsPhone author" Description="Sample description" Publisher="HubSpotr.WindowsPhone">
-    <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
+  <App xmlns="" ProductID="{9a93943f-9de8-41ec-ad38-a29e345fd5c1}" Title="HubSpotr" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="HubSpotr.WindowsPhone author" Description="Sample description" Publisher="HubSpotr.WindowsPhone" BitsPerPixel="32">
+    <IconPath IsRelative="true" IsResource="false">Images\ic_launcher.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_LOCATION" />
       <Capability Name="ID_CAP_NETWORKING" />

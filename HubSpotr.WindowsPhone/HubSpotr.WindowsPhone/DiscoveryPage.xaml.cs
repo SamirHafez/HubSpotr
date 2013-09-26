@@ -11,7 +11,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
-
 namespace HubSpotr.WindowsPhone
 {
     public partial class DiscoveryPage : PhoneApplicationPage
@@ -19,6 +18,8 @@ namespace HubSpotr.WindowsPhone
         private readonly GeoCoordinateWatcher coordinateWatcher;
 
         private readonly ObservableCollection<Hub> hubs;
+
+        private GeoCoordinate lastCoordinate;
 
         public DiscoveryPage()
         {
@@ -48,14 +49,11 @@ namespace HubSpotr.WindowsPhone
         {
             MessageBoxResult result = MessageBox.Show("Are you sure you want to leave?", "Confirm", MessageBoxButton.OKCancel);
 
-            if (result != MessageBoxResult.OK)
-                e.Cancel = true;
-            else
-                try
-                {
+            if (result == MessageBoxResult.OK)
+                while (NavigationService.CanGoBack)
                     NavigationService.RemoveBackEntry();
-                }
-                catch (InvalidOperationException) { }
+            else
+                e.Cancel = true;
 
             base.OnBackKeyPress(e);
         }
@@ -66,11 +64,12 @@ namespace HubSpotr.WindowsPhone
 
         private void coordinateWatcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
         {
+            this.lastCoordinate = e.Position.Location;
+
             var referenceHub = new Hub
             {
                 Lat = e.Position.Location.Latitude,
-                Lng = e.Position.Location.Longitude,
-                Radius = 1 * 1000
+                Lng = e.Position.Location.Longitude
             };
 
             RefreshHubs(referenceHub, 5);
@@ -88,13 +87,18 @@ namespace HubSpotr.WindowsPhone
 
         private void lb1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(e.AddedItems.Count != 1)
+            if (e.AddedItems.Count != 1)
                 return;
 
             var selected = (Hub)e.AddedItems[0];
 
             PhoneApplicationService.Current.State["hub"] = selected;
             NavigationService.Navigate(new Uri("/HubPage.xaml", UriKind.Relative));
+        }
+
+        private void ApplicationBarMenuItem_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri(string.Format("/CreateHubPage.xaml?lat={0}&lng={1}", this.lastCoordinate.Latitude, this.lastCoordinate.Longitude), UriKind.Relative));
         }
 
     }

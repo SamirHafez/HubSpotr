@@ -4,13 +4,17 @@ using Microsoft.Phone.Net.NetworkInformation;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
 using System.IO.IsolatedStorage;
+using System.Threading;
 using System.Windows;
 using System.Windows.Navigation;
+using System.Windows.Threading;
 
 namespace HubSpotr.WindowsPhone
 {
     public partial class MainPage : PhoneApplicationPage
     {
+        private DispatcherTimer timer;
+
         public MainPage()
         {
             InitializeComponent();
@@ -18,24 +22,34 @@ namespace HubSpotr.WindowsPhone
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            base.OnNavigatedTo(e);
+
             if (!DeviceNetworkInformation.IsNetworkAvailable)
             {
                 MessageBox.Show("HubSpotr requires an internet connection", "Sorry", MessageBoxButton.OK);
-                try
-                {
-                    NavigationService.RemoveBackEntry();
-                }
-                catch (InvalidOperationException) { }
                 NavigationService.GoBack();
                 return;
             }
 
-            if (LoginExisting())
-                NavigationService.Navigate(new Uri("/DiscoveryPage.xaml", UriKind.Relative));
-
-            base.OnNavigatedTo(e);
+            this.timer = new DispatcherTimer();
+            this.timer.Interval = new TimeSpan(0, 0, 3);
+            this.timer.Tick += timer_Tick;
+            this.timer.Start();
         }
 
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            this.timer.Stop();
+            this.timer.Tick -= timer_Tick;
+
+            if (LoginExisting())
+                NavigationService.Navigate(new Uri("/DiscoveryPage.xaml", UriKind.Relative));
+            else
+            {
+                bLoginF.Visibility = Visibility.Visible;
+                pbLoading.IsVisible = false;
+            }
+        }
 
         private bool LoginExisting()
         {

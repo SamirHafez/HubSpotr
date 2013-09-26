@@ -1,16 +1,15 @@
-﻿using HubSpotr.Core.Model;
-using HubSpotr.Core.Extensions;
+﻿using HubSpotr.Core.Extensions;
+using HubSpotr.Core.Model;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using System;
-using System.Linq;
-using System.Collections.ObjectModel;
-using System.Device.Location;
 using System.Collections.Generic;
-using System.Windows;
-using System.Threading;
-using System.Windows.Navigation;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Device.Location;
+using System.Linq;
+using System.Threading;
+using System.Windows;
+using System.Windows.Navigation;
 
 namespace HubSpotr.WindowsPhone
 {
@@ -38,6 +37,8 @@ namespace HubSpotr.WindowsPhone
 
         private async void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
+            await this.hub.Join();
+
             List<Post> posts = await this.hub.Posts();
 
             this.posts = new ObservableCollection<Post>(posts);
@@ -49,9 +50,10 @@ namespace HubSpotr.WindowsPhone
             this.coordinateWatcher.Start();
         }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        protected async override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.coordinateWatcher.Stop();
+            await this.hub.Leave();
 
             base.OnNavigatedFrom(e);
         }
@@ -68,7 +70,9 @@ namespace HubSpotr.WindowsPhone
 
         private async void OnTimedEvent(object state)
         {
-            List<Post> newPosts = await this.hub.NewPosts(this.posts.OrderByDescending(p => p.At).First().At);
+            Post latestPost = this.posts.OrderByDescending(p => p.At).FirstOrDefault();
+
+            List<Post> newPosts = latestPost != null ? await this.hub.NewPosts(latestPost.At) : await this.hub.Posts();
 
             Dispatcher.BeginInvoke(() =>
             {

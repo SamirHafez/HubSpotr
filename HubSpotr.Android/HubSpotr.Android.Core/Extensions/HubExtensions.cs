@@ -41,7 +41,7 @@ namespace HubSpotr.Core.Extensions
 
             string lat = hub.Lat.ToString().Replace(',', '.');
             string lng = hub.Lng.ToString().Replace(',', '.');
-            string filter = string.Format("{0}, {1}, {2}", lat, lng, Convert.ToInt32(hub.Radius));
+            string filter = string.Format("{0}, {1}", lat, lng);
 
             return hubs.Where(h => h.Filter == filter)
                        .OrderByDescending(h => h.Participants)
