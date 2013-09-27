@@ -1,6 +1,7 @@
 ﻿using HubSpotr.Core.Extensions;
 using HubSpotr.Core.Model;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Controls.Maps;
 using Microsoft.Phone.Shell;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,9 @@ using System.ComponentModel;
 using System.Device.Location;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace HubSpotr.WindowsPhone
 {
@@ -17,16 +20,17 @@ namespace HubSpotr.WindowsPhone
     {
         private readonly GeoCoordinateWatcher coordinateWatcher;
 
-        private readonly ObservableCollection<Hub> hubs;
+        public ObservableCollection<Hub> Hubs { get; private set; }
 
         private GeoCoordinate lastCoordinate;
 
         public DiscoveryPage()
         {
+            this.DataContext = this;
+
             InitializeComponent();
 
-            this.hubs = new ObservableCollection<Hub>();
-            lb1.ItemsSource = this.hubs;
+            Hubs = new ObservableCollection<Hub>();
 
             this.coordinateWatcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
             this.coordinateWatcher.PositionChanged += coordinateWatcher_PositionChanged;
@@ -66,6 +70,8 @@ namespace HubSpotr.WindowsPhone
         {
             this.lastCoordinate = e.Position.Location;
 
+            mLocation.SetView(this.lastCoordinate, 15);
+
             var referenceHub = new Hub
             {
                 Lat = e.Position.Location.Latitude,
@@ -77,12 +83,36 @@ namespace HubSpotr.WindowsPhone
 
         private async void RefreshHubs(Hub reference, int quantity)
         {
+            pbLoading.IsVisible = true;
+
             List<Hub> nearHubs = await reference.NearHubs(quantity);
 
-            this.hubs.Clear();
+            pbLoading.IsVisible = false;
+
+            Hubs.Clear();
+            mLocation.Children.Clear();
+
+            mLocation.Children.Add(new Pushpin
+            {
+                Location = this.lastCoordinate,
+                Content = new TextBlock 
+                {
+                    Text = "me"
+                }
+            });
 
             foreach (var hub in nearHubs)
-                this.hubs.Add(hub);
+            {
+                Hubs.Add(hub);
+                mLocation.Children.Add(new Pushpin
+                {
+                    Location = new GeoCoordinate(hub.Lat, hub.Lng),
+                    Content = new TextBlock 
+                    {
+                        Text = hub.Name
+                    }
+                });
+            }
         }
 
         private void lb1_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -99,6 +129,16 @@ namespace HubSpotr.WindowsPhone
         private void ApplicationBarMenuItem_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri(string.Format("/CreateHubPage.xaml?lat={0}&lng={1}", this.lastCoordinate.Latitude, this.lastCoordinate.Longitude), UriKind.Relative));
+        }
+
+        private void mLocation_MapZoom(object sender, MapZoomEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void mLocation_MapPan(object sender, MapDragEventArgs e)
+        {
+            e.Handled = true;
         }
 
     }

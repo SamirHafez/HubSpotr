@@ -11,33 +11,37 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="True"
+    xmlns:customControls="clr-namespace:HubSpotr.WindowsPhone.Controls"
+    xmlns:maps="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot" Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="128"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="HUBSPOTR" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="hub discovery" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock Text="HUBSPOTR" Foreground="#FFE51A4B" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="hub discovery" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Foreground="Black"/>
         </StackPanel>
 
+        <maps:Map Name="mLocation" MapZoom="mLocation_MapZoom" MapPan="mLocation_MapPan" CredentialsProvider="Aot7RaoWCbtbTLspHFKnfVY5NPx9hw_zROSIaHHJ6wTJV_pzL7Z3IIO0UEGVClTN" Grid.Row="1"></maps:Map>
+
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <ListBox Name="lb1" SelectionMode="Single" SelectionChanged="lb1_SelectionChanged">
+        <Grid x:Name="ContentPanel" Grid.Row="2" Margin="12,0,12,0">
+            <ListBox ItemsSource="{Binding Hubs}" SelectionChanged="lb1_SelectionChanged">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Name}"></TextBlock>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Participants}"></TextBlock>
-                                <TextBlock> Participants</TextBlock>
-                            </StackPanel>
-                        </StackPanel>
+                        <customControls:HubControl></customControls:HubControl>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -45,7 +49,7 @@
     </Grid>
     
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar Opacity="1.0" IsMenuEnabled="True" IsVisible="True">
+        <shell:ApplicationBar Opacity="1" BackgroundColor="#FFE51A4B" IsMenuEnabled="True" IsVisible="True">
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Click="ApplicationBarMenuItem_Click"  Text="new hub" />
             </shell:ApplicationBar.MenuItems>
@@ -53,5 +57,9 @@
         </shell:ApplicationBar>
 
     </phone:PhoneApplicationPage.ApplicationBar>
+
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="False" x:Name="pbLoading" />
+    </shell:SystemTray.ProgressIndicator>
 
 </phone:PhoneApplicationPage>

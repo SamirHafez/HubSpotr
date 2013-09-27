@@ -33,14 +33,14 @@ namespace HubSpotr.WindowsPhone
 
             this.timer = new DispatcherTimer();
             this.timer.Interval = new TimeSpan(0, 0, 3);
-            this.timer.Tick += timer_Tick;
+            this.timer.Tick += SplashEnded;
             this.timer.Start();
         }
 
-        private void timer_Tick(object sender, EventArgs e)
+        private void SplashEnded(object sender, EventArgs e)
         {
             this.timer.Stop();
-            this.timer.Tick -= timer_Tick;
+            this.timer.Tick -= SplashEnded;
 
             if (LoginExisting())
                 NavigationService.Navigate(new Uri("/DiscoveryPage.xaml", UriKind.Relative));

@@ -19,13 +19,17 @@ namespace HubSpotr.WindowsPhone
 
         private readonly Hub hub;
 
-        private ObservableCollection<Post> posts;
+        public ObservableCollection<Post> Posts { get; set; }
 
         private Timer timer;
 
         public HubPage()
         {
+            this.DataContext = this;
+
             InitializeComponent();
+
+            Posts = new ObservableCollection<Post>();
 
             this.hub = (Hub)PhoneApplicationService.Current.State["hub"];
             tbHubName.Text = this.hub.Name;
@@ -41,9 +45,11 @@ namespace HubSpotr.WindowsPhone
 
             List<Post> posts = await this.hub.Posts();
 
-            this.posts = new ObservableCollection<Post>(posts);
-
-            lb1.ItemsSource = this.posts;
+            foreach (var post in posts)
+            {
+                post.Picture += "?width=73&height=73";
+                Posts.Add(post);
+            }
 
             this.timer = new Timer(OnTimedEvent, null, 0, 2000);
 
@@ -70,14 +76,17 @@ namespace HubSpotr.WindowsPhone
 
         private async void OnTimedEvent(object state)
         {
-            Post latestPost = this.posts.OrderByDescending(p => p.At).FirstOrDefault();
+            Post latestPost = Posts.OrderByDescending(p => p.At).FirstOrDefault();
 
             List<Post> newPosts = latestPost != null ? await this.hub.NewPosts(latestPost.At) : await this.hub.Posts();
 
             Dispatcher.BeginInvoke(() =>
             {
                 foreach (var post in newPosts)
-                    this.posts.Insert(0, post);
+                {
+                    post.Picture += "?width=73&height=73";
+                    Posts.Insert(0, post);
+                }
             });
         }
 
