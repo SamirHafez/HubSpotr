@@ -12,15 +12,22 @@
     <Grid x:Name="LayoutRoot" Margin="12" Background="#FFE51A4B">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="73"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Image Grid.Column="0" Source="{Binding Picture}" Width="73" Height="73"></Image>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition Height=".3*"></RowDefinition>
+                <RowDefinition Height=".7*"></RowDefinition>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="{Binding Name}" Style="{StaticResource PhoneTextTitle3Style}"></TextBlock>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width=".67*"></ColumnDefinition>
+                    <ColumnDefinition Width=".33*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding Name}" TextTrimming="WordEllipsis" Style="{StaticResource PhoneTextTitle3Style}"></TextBlock>
+                <TextBlock Grid.Column="1" TextAlignment="Right" Text="{Binding At}" Style="{StaticResource PhoneTextSubtleStyle}"></TextBlock>
+            </Grid>
             <TextBlock Grid.Row="1" Text="{Binding Message}" Style="{StaticResource PhoneTextSubtleStyle}"></TextBlock>
         </Grid>
     </Grid>

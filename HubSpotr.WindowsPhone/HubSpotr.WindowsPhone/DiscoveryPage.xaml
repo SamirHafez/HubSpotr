@@ -26,13 +26,16 @@
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="HUBSPOTR" Foreground="#FFE51A4B" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="hub discovery" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Foreground="Black"/>
+            <TextBlock Text="hub discovery" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Foreground="#FF2B2A29"/>
         </StackPanel>
 
-        <maps:Map Name="mLocation" MapZoom="mLocation_MapZoom" MapPan="mLocation_MapPan" CredentialsProvider="Aot7RaoWCbtbTLspHFKnfVY5NPx9hw_zROSIaHHJ6wTJV_pzL7Z3IIO0UEGVClTN" Grid.Row="1"></maps:Map>
+        <maps:Map Name="mLocation" CredentialsProvider="Aot7RaoWCbtbTLspHFKnfVY5NPx9hw_zROSIaHHJ6wTJV_pzL7Z3IIO0UEGVClTN" Grid.Row="1"></maps:Map>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="2" Margin="12,0,12,0">
+            <TextBlock Name="tbNoResults" Visibility="Collapsed" Style="{StaticResource PhoneTextExtraLargeStyle}" FontFamily="Segoe WP Black" Foreground="#FF2B2A29" TextWrapping="Wrap">
+                NO HUBS WITHIN RANGE
+            </TextBlock>
             <ListBox ItemsSource="{Binding Hubs}" SelectionChanged="lb1_SelectionChanged">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
@@ -52,6 +55,7 @@
         <shell:ApplicationBar Opacity="1" BackgroundColor="#FFE51A4B" IsMenuEnabled="True" IsVisible="True">
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Click="ApplicationBarMenuItem_Click"  Text="new hub" />
+                <shell:ApplicationBarMenuItem Click="ApplicationBarMenuItem_Click_1"  Text="logout" />
             </shell:ApplicationBar.MenuItems>
 
         </shell:ApplicationBar>

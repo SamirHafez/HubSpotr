@@ -25,7 +25,7 @@
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="HUBSPOTR" Style="{StaticResource PhoneTextNormalStyle}" Foreground="#FFE51A4B"/>
-            <TextBlock Name="tbHubName" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Foreground="Black"/>
+            <TextBlock Name="tbHubName" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Foreground="#FF2B2A29"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->

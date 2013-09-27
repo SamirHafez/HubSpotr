@@ -3,6 +3,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Net.NetworkInformation;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
+using System.ComponentModel;
 using System.IO.IsolatedStorage;
 using System.Threading;
 using System.Windows;
@@ -35,6 +36,14 @@ namespace HubSpotr.WindowsPhone
             this.timer.Interval = new TimeSpan(0, 0, 3);
             this.timer.Tick += SplashEnded;
             this.timer.Start();
+        }
+
+        protected override void OnBackKeyPress(CancelEventArgs e)
+        {
+            while (NavigationService.CanGoBack)
+                NavigationService.RemoveBackEntry();
+
+            base.OnBackKeyPress(e);
         }
 
         private void SplashEnded(object sender, EventArgs e)

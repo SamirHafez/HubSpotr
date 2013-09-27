@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Device.Location;
+using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -31,6 +32,8 @@ namespace HubSpotr.WindowsPhone
             InitializeComponent();
 
             Hubs = new ObservableCollection<Hub>();
+
+            Hubs.CollectionChanged += (o, e) => tbNoResults.Visibility = Hubs.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
 
             this.coordinateWatcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
             this.coordinateWatcher.PositionChanged += coordinateWatcher_PositionChanged;
@@ -97,7 +100,8 @@ namespace HubSpotr.WindowsPhone
                 Location = this.lastCoordinate,
                 Content = new TextBlock 
                 {
-                    Text = "me"
+                    Text = "you",
+                    Foreground = new SolidColorBrush(Colors.Red)
                 }
             });
 
@@ -131,15 +135,20 @@ namespace HubSpotr.WindowsPhone
             NavigationService.Navigate(new Uri(string.Format("/CreateHubPage.xaml?lat={0}&lng={1}", this.lastCoordinate.Latitude, this.lastCoordinate.Longitude), UriKind.Relative));
         }
 
-        private void mLocation_MapZoom(object sender, MapZoomEventArgs e)
+        private void ApplicationBarMenuItem_Click_1(object sender, EventArgs e)
         {
-            e.Handled = true;
-        }
+            MessageBoxResult result = MessageBox.Show("Are you sure?", "confirm", MessageBoxButton.OKCancel);
 
-        private void mLocation_MapPan(object sender, MapDragEventArgs e)
-        {
-            e.Handled = true;
-        }
+            if (result != MessageBoxResult.OK)
+                return;
 
+            IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+
+            settings.Remove("id");
+            settings.Remove("token");
+            settings.Save();
+
+            NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+        }
     }
 }
