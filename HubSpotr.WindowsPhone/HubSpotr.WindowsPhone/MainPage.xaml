@@ -11,7 +11,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="False">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="White">
@@ -19,17 +19,15 @@
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="9*"></RowDefinition>
+                <RowDefinition Height="8*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <Image Grid.Row="0" Source="Images\hubspot_splash.png"></Image>
-            <Button Grid.Row="1" Name="bLoginF" Visibility="Collapsed" Click="NewLogin" Background="#FF2B2A29">login
+            <ProgressBar Name="pbLoading" Foreground="#FF2B2A29" Grid.Row="1" IsIndeterminate="True"></ProgressBar>
+            <Button Grid.Row="2" Name="bLoginF" Visibility="Collapsed" Click="NewLogin" Background="#FF2B2A29">login
             </Button>
         </Grid>
     </Grid>
-
-    <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="True" x:Name="pbLoading" />
-    </shell:SystemTray.ProgressIndicator>
 
 </phone:PhoneApplicationPage>

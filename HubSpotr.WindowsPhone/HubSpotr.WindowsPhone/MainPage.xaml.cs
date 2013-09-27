@@ -55,8 +55,8 @@ namespace HubSpotr.WindowsPhone
                 NavigationService.Navigate(new Uri("/DiscoveryPage.xaml", UriKind.Relative));
             else
             {
+                pbLoading.Visibility = Visibility.Collapsed;
                 bLoginF.Visibility = Visibility.Visible;
-                pbLoading.IsVisible = false;
             }
         }
 

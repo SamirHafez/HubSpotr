@@ -19,7 +19,7 @@
     <Grid x:Name="LayoutRoot" Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="128"/>
+            <RowDefinition Height=".3*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -29,14 +29,20 @@
             <TextBlock Text="hub discovery" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Foreground="#FF2B2A29"/>
         </StackPanel>
 
-        <maps:Map Name="mLocation" CredentialsProvider="Aot7RaoWCbtbTLspHFKnfVY5NPx9hw_zROSIaHHJ6wTJV_pzL7Z3IIO0UEGVClTN" Grid.Row="1"></maps:Map>
+        <maps:Map Name="mLocation" CredentialsProvider="Aot7RaoWCbtbTLspHFKnfVY5NPx9hw_zROSIaHHJ6wTJV_pzL7Z3IIO0UEGVClTN" Grid.Row="1" CopyrightVisibility="Collapsed" LogoVisibility="Collapsed"></maps:Map>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="2" Margin="12,0,12,0">
-            <TextBlock Name="tbNoResults" Visibility="Collapsed" Style="{StaticResource PhoneTextExtraLargeStyle}" FontFamily="Segoe WP Black" Foreground="#FF2B2A29" TextWrapping="Wrap">
+            <ProgressBar Name="pbLoading" Foreground="#FF2B2A29" IsIndeterminate="True"></ProgressBar>
+            <StackPanel Name="spNoResults" Tap="spNoResults_Tap" Margin="0,28,0,0">
+                <TextBlock Style="{StaticResource PhoneTextExtraLargeStyle}" FontFamily="Segoe WP Black" Foreground="#FF2B2A29" TextWrapping="Wrap">
                 NO HUBS WITHIN RANGE
-            </TextBlock>
-            <ListBox ItemsSource="{Binding Hubs}" SelectionChanged="lb1_SelectionChanged">
+                </TextBlock>
+                <TextBlock Style="{StaticResource PhoneTextExtraLargeStyle}" FontFamily="Segoe WP Black" Foreground="#FFE51A4B">
+                    TAP TO CREATE
+                </TextBlock>
+            </StackPanel>
+            <ListBox ItemsSource="{Binding Hubs}" SelectionChanged="JoinHub">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
@@ -55,15 +61,11 @@
         <shell:ApplicationBar Opacity="1" BackgroundColor="#FFE51A4B" IsMenuEnabled="True" IsVisible="True">
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Click="ApplicationBarMenuItem_Click"  Text="new hub" />
-                <shell:ApplicationBarMenuItem Click="ApplicationBarMenuItem_Click_1"  Text="logout" />
+                <shell:ApplicationBarMenuItem Click="Logout"  Text="logout" />
             </shell:ApplicationBar.MenuItems>
 
         </shell:ApplicationBar>
 
     </phone:PhoneApplicationPage.ApplicationBar>
-
-    <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="False" x:Name="pbLoading" />
-    </shell:SystemTray.ProgressIndicator>
 
 </phone:PhoneApplicationPage>

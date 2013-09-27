@@ -11,6 +11,7 @@ using System.Device.Location;
 using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -33,11 +34,11 @@ namespace HubSpotr.WindowsPhone
 
             Hubs = new ObservableCollection<Hub>();
 
-            Hubs.CollectionChanged += (o, e) => tbNoResults.Visibility = Hubs.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            Hubs.CollectionChanged += (o, e) => spNoResults.Visibility = Hubs.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
 
             this.coordinateWatcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
-            this.coordinateWatcher.PositionChanged += coordinateWatcher_PositionChanged;
-            this.coordinateWatcher.StatusChanged += coordinateWatcher_StatusChanged;
+            this.coordinateWatcher.PositionChanged += OnPositionChanged;
+            this.coordinateWatcher.StatusChanged += OnLocationStatusChanged;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -65,11 +66,11 @@ namespace HubSpotr.WindowsPhone
             base.OnBackKeyPress(e);
         }
 
-        private void coordinateWatcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
+        private void OnLocationStatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
         {
         }
 
-        private void coordinateWatcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
+        private void OnPositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
         {
             this.lastCoordinate = e.Position.Location;
 
@@ -81,16 +82,17 @@ namespace HubSpotr.WindowsPhone
                 Lng = e.Position.Location.Longitude
             };
 
-            RefreshHubs(referenceHub, 5);
+            RefreshHubs(referenceHub, 10);
         }
 
         private async void RefreshHubs(Hub reference, int quantity)
         {
-            pbLoading.IsVisible = true;
+            pbLoading.Visibility = Visibility.Visible;
+            spNoResults.Visibility = Visibility.Collapsed;
 
             List<Hub> nearHubs = await reference.NearHubs(quantity);
 
-            pbLoading.IsVisible = false;
+            pbLoading.Visibility = Visibility.Collapsed;
 
             Hubs.Clear();
             mLocation.Children.Clear();
@@ -119,7 +121,7 @@ namespace HubSpotr.WindowsPhone
             }
         }
 
-        private void lb1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void JoinHub(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count != 1)
                 return;
@@ -135,7 +137,7 @@ namespace HubSpotr.WindowsPhone
             NavigationService.Navigate(new Uri(string.Format("/CreateHubPage.xaml?lat={0}&lng={1}", this.lastCoordinate.Latitude, this.lastCoordinate.Longitude), UriKind.Relative));
         }
 
-        private void ApplicationBarMenuItem_Click_1(object sender, EventArgs e)
+        private void Logout(object sender, EventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Are you sure?", "confirm", MessageBoxButton.OKCancel);
 
@@ -149,6 +151,11 @@ namespace HubSpotr.WindowsPhone
             settings.Save();
 
             NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+        }
+
+        private void spNoResults_Tap(object sender, GestureEventArgs e)
+        {
+            ApplicationBarMenuItem_Click(this, EventArgs.Empty);
         }
     }
 }

@@ -35,11 +35,11 @@ namespace HubSpotr.WindowsPhone
             tbHubName.Text = this.hub.Name;
 
             this.coordinateWatcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
-            this.coordinateWatcher.PositionChanged += coordinateWatcher_PositionChanged;
-            this.coordinateWatcher.StatusChanged += coordinateWatcher_StatusChanged;
+            this.coordinateWatcher.PositionChanged += OnPositionChanged;
+            this.coordinateWatcher.StatusChanged += OnLocationStatusChanged;
         }
 
-        private async void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             await this.hub.Join();
 
@@ -51,9 +51,11 @@ namespace HubSpotr.WindowsPhone
                 Posts.Add(post);
             }
 
-            this.timer = new Timer(OnTimedEvent, null, 0, 2000);
+            this.timer = new Timer(QueryPosts, null, 0, 2000);
 
             this.coordinateWatcher.Start();
+            
+            base.OnNavigatedTo(e);
         }
 
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
@@ -74,7 +76,7 @@ namespace HubSpotr.WindowsPhone
             base.OnBackKeyPress(e);
         }
 
-        private async void OnTimedEvent(object state)
+        private async void QueryPosts(object state)
         {
             Post latestPost = Posts.OrderByDescending(p => p.At).FirstOrDefault();
 
@@ -90,11 +92,11 @@ namespace HubSpotr.WindowsPhone
             });
         }
 
-        private void coordinateWatcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
+        private void OnLocationStatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
         {
         }
 
-        private void coordinateWatcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
+        private void OnPositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
         {
             GeoCoordinate location = e.Position.Location;
 
@@ -108,9 +110,11 @@ namespace HubSpotr.WindowsPhone
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Post(object sender, RoutedEventArgs e)
         {
             string message = tbMessage.Text;
+
+            tbMessage.Text = string.Empty;
 
             if (message == null || (message = message.Trim()) == string.Empty)
                 return;

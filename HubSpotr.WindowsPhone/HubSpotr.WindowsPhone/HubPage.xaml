@@ -12,7 +12,6 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True"
-    Loaded="PhoneApplicationPage_Loaded"
     xmlns:customControls="clr-namespace:HubSpotr.WindowsPhone.Controls">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -52,7 +51,7 @@
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBox Name="tbMessage" Grid.Column="0"></TextBox>
-                <Button Click="Button_Click" Background="White" Foreground="#FFE51A4B" Grid.Column="1">Send</Button>
+                <Button Click="Post" Background="White" Foreground="#FFE51A4B" Grid.Column="1">Send</Button>
             </Grid>
         </Grid>
     </Grid>
