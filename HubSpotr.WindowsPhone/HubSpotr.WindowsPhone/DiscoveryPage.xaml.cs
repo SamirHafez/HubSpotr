@@ -11,10 +11,8 @@ using System.Device.Location;
 using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace HubSpotr.WindowsPhone
 {
@@ -153,7 +151,7 @@ namespace HubSpotr.WindowsPhone
             NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
         }
 
-        private void spNoResults_Tap(object sender, GestureEventArgs e)
+        private void spNoResults_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             ApplicationBarMenuItem_Click(this, EventArgs.Empty);
         }

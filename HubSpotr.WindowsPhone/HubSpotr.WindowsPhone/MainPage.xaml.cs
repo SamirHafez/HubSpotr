@@ -5,7 +5,6 @@ using Microsoft.WindowsAzure.MobileServices;
 using System;
 using System.ComponentModel;
 using System.IO.IsolatedStorage;
-using System.Threading;
 using System.Windows;
 using System.Windows.Navigation;
 using System.Windows.Threading;

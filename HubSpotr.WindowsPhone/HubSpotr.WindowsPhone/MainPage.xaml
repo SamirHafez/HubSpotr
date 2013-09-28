@@ -11,6 +11,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     shell:SystemTray.IsVisible="False">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -24,8 +25,8 @@
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <Image Grid.Row="0" Source="Images\hubspot_splash.png"></Image>
-            <ProgressBar Name="pbLoading" Foreground="#FF2B2A29" Grid.Row="1" IsIndeterminate="True"></ProgressBar>
-            <Button Grid.Row="2" Name="bLoginF" Visibility="Collapsed" Click="NewLogin" Background="#FF2B2A29">login
+            <toolkit:PerformanceProgressBar Name="pbLoading" Foreground="{StaticResource HubSpotr_Black}" Grid.Row="1" IsIndeterminate="True"></toolkit:PerformanceProgressBar>
+            <Button Grid.Row="2" Name="bLoginF" Visibility="Collapsed" Click="NewLogin" Background="{StaticResource HubSpotr_Black}">login
             </Button>
         </Grid>
     </Grid>
