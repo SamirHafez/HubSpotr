@@ -140,7 +140,7 @@ namespace HubSpotr.WindowsPhone
 
         private void Logout(object sender, EventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Are you sure?", "confirm", MessageBoxButton.OKCancel);
+            MessageBoxResult result = MessageBox.Show("Are you sure?", "logout", MessageBoxButton.OKCancel);
 
             if (result != MessageBoxResult.OK)
                 return;

@@ -15,7 +15,7 @@
     shell:SystemTray.IsVisible="False">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="White">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource HubSpotr_Pink}">
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
@@ -26,7 +26,7 @@
             </Grid.RowDefinitions>
             <Image Grid.Row="0" Source="Images\hubspot_splash.png"></Image>
             <toolkit:PerformanceProgressBar Name="pbLoading" Foreground="{StaticResource HubSpotr_Black}" Grid.Row="1" IsIndeterminate="True"></toolkit:PerformanceProgressBar>
-            <Button Grid.Row="2" Name="bLoginF" Visibility="Collapsed" Click="NewLogin" Background="{StaticResource HubSpotr_Black}">login
+            <Button Grid.Row="2" Name="bLoginF" BorderBrush="{StaticResource HubSpotr_Black}" Visibility="Collapsed" Click="NewLogin" Background="{StaticResource HubSpotr_Black}">login
             </Button>
         </Grid>
     </Grid>

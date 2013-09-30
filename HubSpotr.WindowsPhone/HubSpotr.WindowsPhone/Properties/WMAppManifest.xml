@@ -13,9 +13,10 @@
     <Tokens>
       <PrimaryToken TokenID="HubSpotr.WindowsPhoneToken" TaskName="_default">
         <TemplateType5>
-          <BackgroundImageURI IsRelative="true" IsResource="false">Background.png</BackgroundImageURI>
+          <BackgroundImageURI IsRelative="true" IsResource="false">Images\hubspot_tile.png</BackgroundImageURI>
           <Count>0</Count>
-          <Title>HubSpotr</Title>
+          <Title>
+          </Title>
         </TemplateType5>
       </PrimaryToken>
     </Tokens>

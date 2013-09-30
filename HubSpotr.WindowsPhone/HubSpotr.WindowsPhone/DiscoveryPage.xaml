@@ -12,7 +12,7 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True"
-    xmlns:customControls="clr-namespace:HubSpotr.WindowsPhone.Controls"
+    xmlns:control="clr-namespace:HubSpotr.WindowsPhone.Controls"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:maps="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps">
 
@@ -51,7 +51,7 @@
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <customControls:HubControl></customControls:HubControl>
+                        <control:HubControl></control:HubControl>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

@@ -114,6 +114,7 @@
     <Compile Include="Controls\PostControl.xaml.cs">
       <DependentUpon>PostControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\DateConverter.cs" />
     <Compile Include="CreateHubPage.xaml.cs">
       <DependentUpon>CreateHubPage.xaml</DependentUpon>
     </Compile>
@@ -164,15 +165,10 @@
     <None Include="Properties\WMAppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ApplicationIcon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Background.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Images\appbar.cancel.rest.png" />
     <Content Include="Images\appbar.check.rest.png" />
     <Content Include="Images\hubspot_splash.png" />
+    <Content Include="Images\hubspot_tile.png" />
     <Content Include="Images\ic_launcher.png" />
     <Content Include="README_FIRST.txt" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />

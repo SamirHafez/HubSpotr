@@ -13,7 +13,7 @@
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    xmlns:customControls="clr-namespace:HubSpotr.WindowsPhone.Controls">
+    xmlns:control="clr-namespace:HubSpotr.WindowsPhone.Controls">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="White">
@@ -42,7 +42,7 @@
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <customControls:PostControl></customControls:PostControl>
+                        <control:PostControl></control:PostControl>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -52,7 +52,7 @@
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <toolkit:PhoneTextBox Name="tbMessage" Hint="message..." Grid.Column="0"></toolkit:PhoneTextBox>
-                <Button Click="Post" Background="White" Foreground="{StaticResource HubSpotr_Pink}" Grid.Column="1">Send</Button>
+                <Button Click="Post" Background="{StaticResource HubSpotr_Black}" BorderBrush="{StaticResource HubSpotr_Black}" Grid.Column="1">Send</Button>
             </Grid>
         </Grid>
     </Grid>

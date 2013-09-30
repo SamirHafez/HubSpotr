@@ -68,7 +68,7 @@ namespace HubSpotr.WindowsPhone
 
         protected override void OnBackKeyPress(CancelEventArgs e)
         {
-            MessageBoxResult response = MessageBox.Show("You are about to leave this hub", "Leaving", MessageBoxButton.OK);
+            MessageBoxResult response = MessageBox.Show("You are about to leave this hub", "leaving", MessageBoxButton.OK);
 
             if (response != MessageBoxResult.OK)
                 e.Cancel = true;
@@ -105,7 +105,7 @@ namespace HubSpotr.WindowsPhone
             if (distanceToHubCenter > this.hub.Radius)
             {
                 this.coordinateWatcher.Stop();
-                MessageBox.Show("You fell out of this hubs range", "Sorry", MessageBoxButton.OK);
+                MessageBox.Show("You fell out of this hubs range", "exiting", MessageBoxButton.OK);
                 NavigationService.GoBack();
             }
         }

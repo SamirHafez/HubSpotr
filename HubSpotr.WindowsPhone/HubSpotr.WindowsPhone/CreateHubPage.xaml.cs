@@ -49,7 +49,7 @@ namespace HubSpotr.WindowsPhone
 
             if (name == null || (name = name.Trim()) == string.Empty)
             {
-                MessageBox.Show("Please specify a name for the hub", "error", MessageBoxButton.OK);
+                MessageBox.Show("Please specify a name for the hub", "missing field", MessageBoxButton.OK);
                 return;
             }
 
@@ -68,7 +68,7 @@ namespace HubSpotr.WindowsPhone
 
             pbLoading.Visibility = Visibility.Collapsed;
 
-            MessageBox.Show("Hub successfully created", "Success", MessageBoxButton.OK);
+            MessageBox.Show("Hub successfully created", "success", MessageBoxButton.OK);
 
             button.IsEnabled = true;
             NavigationService.GoBack();
@@ -92,16 +92,6 @@ namespace HubSpotr.WindowsPhone
                     Fill = new SolidColorBrush(Color.FromArgb(125, 255, 0, 0))
                 });
             }
-        }
-
-        private void OnMapZoomChanged(object sender, MapZoomEventArgs e)
-        {
-            e.Handled = true;
-        }
-
-        private void OnMapPanChanged(object sender, MapDragEventArgs e)
-        {
-            e.Handled = true;
         }
     }
 }
