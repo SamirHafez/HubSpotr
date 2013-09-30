@@ -17,6 +17,10 @@ namespace HubSpotr.WindowsPhone
     {
         private GeoCoordinate coordinates;
 
+        // http://msdn.microsoft.com/en-us/library/aa940990.aspx
+        private const double MAP_ZOOM = 15;
+        private const double MAP_CONSTANT = 4.78;
+
         public CreateHubPage()
         {
             InitializeComponent();
@@ -38,6 +42,14 @@ namespace HubSpotr.WindowsPhone
                     Text = "you",
                     Foreground = (SolidColorBrush)Application.Current.Resources["HubSpotr_Pink"]
                 }
+            });
+
+            mLocation.Children.Add(new Ellipse
+            {
+                Width = (sRadius.Value / MAP_CONSTANT) * 2,
+                Height = (sRadius.Value / MAP_CONSTANT) * 2,
+                Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Pink"],
+                Opacity = .5
             });
 
             base.OnNavigatedTo(e);
@@ -83,13 +95,12 @@ namespace HubSpotr.WindowsPhone
                 if(mLocation.Children.Count > 1)
                     mLocation.Children.RemoveAt(1);
 
-                double radius = e.NewValue / 4.78;
-
                 mLocation.Children.Add(new Ellipse
                 {
-                    Width = radius * 2,
-                    Height = radius * 2,
-                    Fill = new SolidColorBrush(Color.FromArgb(125, 255, 0, 0))
+                    Width = (e.NewValue / MAP_CONSTANT) * 2,
+                    Height = (e.NewValue / MAP_CONSTANT) * 2,
+                    Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Pink"],
+                    Opacity = .5
                 });
             }
         }
