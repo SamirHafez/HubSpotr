@@ -30,7 +30,7 @@
             <TextBlock Text="hub discovery" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Foreground="{StaticResource HubSpotr_Black}"/>
         </StackPanel>
 
-        <maps:Map Name="mLocation" CredentialsProvider="Aot7RaoWCbtbTLspHFKnfVY5NPx9hw_zROSIaHHJ6wTJV_pzL7Z3IIO0UEGVClTN" Grid.Row="1" CopyrightVisibility="Collapsed" LogoVisibility="Collapsed"></maps:Map>
+        <maps:Map Name="mLocation" Visibility="Collapsed" CredentialsProvider="Aot7RaoWCbtbTLspHFKnfVY5NPx9hw_zROSIaHHJ6wTJV_pzL7Z3IIO0UEGVClTN" Grid.Row="1" CopyrightVisibility="Collapsed" LogoVisibility="Collapsed"></maps:Map>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="2" Margin="12,0,12,0">

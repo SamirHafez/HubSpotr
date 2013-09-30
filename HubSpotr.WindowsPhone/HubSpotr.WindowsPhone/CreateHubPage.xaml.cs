@@ -36,7 +36,7 @@ namespace HubSpotr.WindowsPhone
                 Content = new TextBlock
                 {
                     Text = "you",
-                    Foreground = new SolidColorBrush(Colors.Red)
+                    Foreground = (SolidColorBrush)Application.Current.Resources["HubSpotr_Pink"]
                 }
             });
 

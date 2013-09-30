@@ -70,9 +70,23 @@ namespace HubSpotr.WindowsPhone
 
         private void OnPositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
         {
+            mLocation.Visibility = Visibility.Visible;
+
             this.lastCoordinate = e.Position.Location;
 
             mLocation.SetView(this.lastCoordinate, 15);
+
+            mLocation.Children.Clear();
+
+            mLocation.Children.Add(new Pushpin
+            {
+                Location = this.lastCoordinate,
+                Content = new TextBlock
+                {
+                    Text = "you",
+                    Foreground = (SolidColorBrush)Application.Current.Resources["HubSpotr_Pink"]
+                }
+            });
 
             var referenceHub = new Hub
             {
@@ -93,17 +107,6 @@ namespace HubSpotr.WindowsPhone
             pbLoading.Visibility = Visibility.Collapsed;
 
             Hubs.Clear();
-            mLocation.Children.Clear();
-
-            mLocation.Children.Add(new Pushpin
-            {
-                Location = this.lastCoordinate,
-                Content = new TextBlock 
-                {
-                    Text = "you",
-                    Foreground = new SolidColorBrush(Colors.Red)
-                }
-            });
 
             foreach (var hub in nearHubs)
             {
