@@ -1,7 +1,8 @@
 ﻿using HubSpotr.Core.Extensions;
 using HubSpotr.Core.Model;
+using HubSpotr.WindowsPhone.ViewModels;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -10,58 +11,54 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Navigation;
+using Windows.Devices.Geolocation;
 
 namespace HubSpotr.WindowsPhone
 {
     public partial class HubPage : PhoneApplicationPage
     {
-        private readonly GeoCoordinateWatcher coordinateWatcher;
-
-        private readonly Hub hub;
-
-        public ObservableCollection<Post> Posts { get; set; }
+        private readonly Geolocator geolocator;
 
         private Timer timer;
 
         public HubPage()
         {
-            this.DataContext = this;
+            this.DataContext = App.Hub;
 
             InitializeComponent();
 
-            Posts = new ObservableCollection<Post>();
+            tbHubName.Text = App.Hub.Name;
 
-            this.hub = (Hub)PhoneApplicationService.Current.State["hub"];
-            tbHubName.Text = this.hub.Name;
+            this.geolocator = new Geolocator
+            {
+                DesiredAccuracyInMeters = 10,
+                MovementThreshold = 10,
+            };
 
-            this.coordinateWatcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
-            this.coordinateWatcher.PositionChanged += OnPositionChanged;
-            this.coordinateWatcher.StatusChanged += OnLocationStatusChanged;
+            this.geolocator.PositionChanged += OnPositionChanged;
+            this.geolocator.StatusChanged += OnLocationStatusChanged;
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            await this.hub.Join();
+            await App.Hub.Source.Join();
 
-            List<Post> posts = await this.hub.Posts();
+            List<Post> posts = await App.Hub.Source.Posts();
 
             foreach (var post in posts)
             {
                 post.Picture += "?width=73&height=73";
-                Posts.Add(post);
+                App.Hub.Posts.Add(new PostViewModel(post));
             }
 
             this.timer = new Timer(QueryPosts, null, 0, 2000);
-
-            this.coordinateWatcher.Start();
             
             base.OnNavigatedTo(e);
         }
 
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            this.coordinateWatcher.Stop();
-            await this.hub.Leave();
+            await App.Hub.Source.Leave();
 
             base.OnNavigatedFrom(e);
         }
@@ -72,39 +69,38 @@ namespace HubSpotr.WindowsPhone
 
             if (response != MessageBoxResult.OK)
                 e.Cancel = true;
-
-            base.OnBackKeyPress(e);
+            else
+                NavigationService.Navigate(new Uri("/DiscoveryPage.xaml", UriKind.Relative));
         }
 
         private async void QueryPosts(object state)
         {
-            Post latestPost = Posts.OrderByDescending(p => p.At).FirstOrDefault();
+            PostViewModel latestPost = App.Hub.Posts.OrderByDescending(p => p.At).FirstOrDefault();
 
-            List<Post> newPosts = latestPost != null ? await this.hub.NewPosts(latestPost.At) : await this.hub.Posts();
+            List<Post> newPosts = latestPost != null ? await App.Hub.Source.NewPosts(latestPost.At) : await App.Hub.Source.Posts();
 
             Dispatcher.BeginInvoke(() =>
             {
                 foreach (var post in newPosts)
                 {
                     post.Picture += "?width=73&height=73";
-                    Posts.Insert(0, post);
+                    App.Hub.Posts.Insert(0, new PostViewModel(post));
                 }
             });
         }
 
-        private void OnLocationStatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
+        private void OnLocationStatusChanged(Geolocator sender, StatusChangedEventArgs e)
         {
         }
 
-        private void OnPositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
+        private void OnPositionChanged(Geolocator sender, PositionChangedEventArgs e)
         {
-            GeoCoordinate location = e.Position.Location;
+            GeoCoordinate location = new GeoCoordinate(e.Position.Coordinate.Latitude, e.Position.Coordinate.Longitude);
 
-            double distanceToHubCenter = location.GetDistanceTo(new GeoCoordinate(this.hub.Lat, this.hub.Lng));
+            double distanceToHubCenter = location.GetDistanceTo(new GeoCoordinate(App.Hub.Lat, App.Hub.Lng));
 
-            if (distanceToHubCenter > this.hub.Radius)
+            if (distanceToHubCenter > App.Hub.Radius)
             {
-                this.coordinateWatcher.Stop();
                 MessageBox.Show("You fell out of this hubs range", "exiting", MessageBoxButton.OK);
                 NavigationService.GoBack();
             }
@@ -121,7 +117,7 @@ namespace HubSpotr.WindowsPhone
 
             new Post
             {
-                HubId = this.hub.Id,
+                HubId = App.Hub.Id,
                 Message = message
             }.Post();
         }

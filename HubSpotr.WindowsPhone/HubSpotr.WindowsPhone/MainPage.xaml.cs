@@ -1,5 +1,4 @@
-﻿using HubSpotr.Core;
-using Microsoft.Phone.Controls;
+﻿using Microsoft.Phone.Controls;
 using Microsoft.Phone.Net.NetworkInformation;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
@@ -14,6 +13,7 @@ namespace HubSpotr.WindowsPhone
     public partial class MainPage : PhoneApplicationPage
     {
         private DispatcherTimer timer;
+        private bool hasCredentials;
 
         public MainPage()
         {
@@ -27,30 +27,27 @@ namespace HubSpotr.WindowsPhone
             if (!DeviceNetworkInformation.IsNetworkAvailable)
             {
                 MessageBox.Show("HubSpotr requires an internet connection", "Sorry", MessageBoxButton.OK);
-                NavigationService.GoBack();
-                return;
+                Application.Current.Terminate();
             }
 
             this.timer = new DispatcherTimer();
-            this.timer.Interval = new TimeSpan(0, 0, 3);
-            this.timer.Tick += SplashEnded;
+            this.timer.Interval = new TimeSpan(0, 0, 0, 1);
+            this.timer.Tick += TryLogin;
             this.timer.Start();
+            this.hasCredentials = HasCredentials();
         }
 
         protected override void OnBackKeyPress(CancelEventArgs e)
         {
-            while (NavigationService.CanGoBack)
-                NavigationService.RemoveBackEntry();
-
-            base.OnBackKeyPress(e);
+            Application.Current.Terminate();
         }
 
-        private void SplashEnded(object sender, EventArgs e)
+        private void TryLogin(object sender, EventArgs e)
         {
             this.timer.Stop();
-            this.timer.Tick -= SplashEnded;
+            this.timer.Tick -= TryLogin;
 
-            if (LoginExisting())
+            if (hasCredentials)
                 NavigationService.Navigate(new Uri("/DiscoveryPage.xaml", UriKind.Relative));
             else
             {
@@ -59,7 +56,7 @@ namespace HubSpotr.WindowsPhone
             }
         }
 
-        private bool LoginExisting()
+        private bool HasCredentials()
         {
             IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
 
@@ -69,7 +66,7 @@ namespace HubSpotr.WindowsPhone
             var id = (string)settings["id"];
             var token = (string)settings["token"];
 
-            AzureContext.Client.CurrentUser = new MobileServiceUser(id)
+            App.MobileServiceClient.CurrentUser = new MobileServiceUser(id)
             {
                 MobileServiceAuthenticationToken = token
             };
@@ -82,7 +79,7 @@ namespace HubSpotr.WindowsPhone
         {
             try
             {
-                MobileServiceUser user = await AzureContext.Client.LoginAsync(MobileServiceAuthenticationProvider.Facebook);
+                MobileServiceUser user = await App.MobileServiceClient.LoginAsync(MobileServiceAuthenticationProvider.Facebook);
 
                 IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
 
@@ -94,7 +91,7 @@ namespace HubSpotr.WindowsPhone
             }
             catch
             {
-                MessageBox.Show("You must authenticate to use HubSpotr", "Failed", MessageBoxButton.OK);
+                MessageBox.Show("Login failed.", "Failed", MessageBoxButton.OK);
             }
         }
     }

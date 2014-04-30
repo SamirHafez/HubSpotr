@@ -1,11 +1,12 @@
 ﻿using HubSpotr.Core.Extensions;
 using HubSpotr.Core.Model;
+using HubSpotr.WindowsPhone.Controls;
+using HubSpotr.WindowsPhone.ViewModels;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Controls.Maps;
-using Microsoft.Phone.Shell;
+using Microsoft.Phone.Maps.Controls;
+using Microsoft.Phone.Maps.Toolkit;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Device.Location;
 using System.IO.IsolatedStorage;
@@ -13,42 +14,22 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
+using System.Windows.Shapes;
+using Windows.Devices.Geolocation;
 
 namespace HubSpotr.WindowsPhone
 {
     public partial class DiscoveryPage : PhoneApplicationPage
     {
-        private readonly GeoCoordinateWatcher coordinateWatcher;
-
-        public ObservableCollection<Hub> Hubs { get; private set; }
-
-        private GeoCoordinate lastCoordinate;
+        private Geolocator geolocator;
 
         public DiscoveryPage()
         {
-            this.DataContext = this;
+            this.DataContext = App.Hubs;
 
             InitializeComponent();
 
-            Hubs = new ObservableCollection<Hub>();
-
-            Hubs.CollectionChanged += (o, e) => spNoResults.Visibility = Hubs.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
-
-            this.coordinateWatcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
-            this.coordinateWatcher.PositionChanged += OnPositionChanged;
-            this.coordinateWatcher.StatusChanged += OnLocationStatusChanged;
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            this.coordinateWatcher.Start();
-            base.OnNavigatedTo(e);
-        }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            this.coordinateWatcher.Stop();
-            base.OnNavigatedFrom(e);
+            App.Hubs.CollectionChanged += (o, e) => spNoResults.Visibility = App.Hubs.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         }
 
         protected override void OnBackKeyPress(CancelEventArgs e)
@@ -56,86 +37,105 @@ namespace HubSpotr.WindowsPhone
             MessageBoxResult result = MessageBox.Show("Are you sure you want to leave?", "Confirm", MessageBoxButton.OKCancel);
 
             if (result == MessageBoxResult.OK)
-                while (NavigationService.CanGoBack)
-                    NavigationService.RemoveBackEntry();
+                Application.Current.Terminate();
             else
                 e.Cancel = true;
-
-            base.OnBackKeyPress(e);
         }
 
-        private void OnLocationStatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
+        private void mLocation_Loaded(object sender, RoutedEventArgs e)
         {
-        }
-
-        private void OnPositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
-        {
-            mLocation.Visibility = Visibility.Visible;
-
-            this.lastCoordinate = e.Position.Location;
-
-            mLocation.SetView(this.lastCoordinate, 15);
-
-            mLocation.Children.Clear();
-
-            mLocation.Children.Add(new Pushpin
+            this.geolocator = new Geolocator
             {
-                Location = this.lastCoordinate,
-                Content = new TextBlock
-                {
-                    Text = "you",
-                    Foreground = (SolidColorBrush)Application.Current.Resources["HubSpotr_Pink"]
-                }
-            });
-
-            var referenceHub = new Hub
-            {
-                Lat = e.Position.Location.Latitude,
-                Lng = e.Position.Location.Longitude
+                DesiredAccuracyInMeters = 10,
+                MovementThreshold = 10,
             };
 
-            RefreshHubs(referenceHub, 10);
+            this.geolocator.PositionChanged += OnPositionChanged;
+        }
+
+        private void OnPositionChanged(Geolocator sender, PositionChangedEventArgs e)
+        {
+            var geoCoordinate = new GeoCoordinate(e.Position.Coordinate.Latitude, e.Position.Coordinate.Longitude);
+
+            Dispatcher.BeginInvoke(() =>
+            {
+                pbLoading.Visibility = Visibility.Collapsed;
+
+                mLocation.Visibility = Visibility.Visible;
+
+                mLocation.SetView(geoCoordinate, 16, MapAnimationKind.None);
+
+                mLocation.Layers.Clear();
+
+                var pinLayer = new MapLayer();
+                Pushpin p = new Pushpin();
+                pinLayer.Add(new MapOverlay
+                {
+                    GeoCoordinate = geoCoordinate,
+                    PositionOrigin = new Point(.5, .5),
+                    Content = new Ellipse
+                    {
+                        Width = 5,
+                        Height = 5,
+                        Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Black"],
+                    }
+                });
+
+                mLocation.Layers.Add(pinLayer);
+
+                var referenceHub = new Hub
+                {
+                    Lat = e.Position.Coordinate.Latitude,
+                    Lng = e.Position.Coordinate.Longitude
+                };
+
+                RefreshHubs(referenceHub, 10);
+            });
         }
 
         private async void RefreshHubs(Hub reference, int quantity)
         {
-            pbLoading.Visibility = Visibility.Visible;
             spNoResults.Visibility = Visibility.Collapsed;
 
             List<Hub> nearHubs = await reference.NearHubs(quantity);
 
-            pbLoading.Visibility = Visibility.Collapsed;
-
-            Hubs.Clear();
+            App.Hubs.Clear();
 
             foreach (var hub in nearHubs)
             {
-                Hubs.Add(hub);
-                mLocation.Children.Add(new Pushpin
+                App.Hubs.Add(new HubViewModel(hub));
+
+                var pinLayer = new MapLayer();
+                pinLayer.Add(new MapOverlay
                 {
-                    Location = new GeoCoordinate(hub.Lat, hub.Lng),
-                    Content = new TextBlock 
+                    GeoCoordinate = new GeoCoordinate(hub.Lat, hub.Lng),
+                    PositionOrigin = new Point(.5, .5),
+                    Content = new Ellipse
                     {
-                        Text = hub.Name
+                        Width = (hub.Radius / 2.39) * 2,
+                        Height = (hub.Radius / 2.39) * 2,
+                        Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Pink"],
+                        Opacity = .5
                     }
                 });
+                pinLayer.Add(new MapOverlay
+                {
+                    GeoCoordinate = new GeoCoordinate(hub.Lat, hub.Lng),
+                    PositionOrigin = new Point(.5, .5),
+                    Content = new TextBlock
+                    {
+                        Text = hub.Name,
+                        Foreground = new SolidColorBrush(Colors.White)
+                    }
+                });
+
+                mLocation.Layers.Add(pinLayer);
             }
-        }
-
-        private void JoinHub(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems.Count != 1)
-                return;
-
-            var selected = (Hub)e.AddedItems[0];
-
-            PhoneApplicationService.Current.State["hub"] = selected;
-            NavigationService.Navigate(new Uri("/HubPage.xaml", UriKind.Relative));
         }
 
         private void ApplicationBarMenuItem_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri(string.Format("/CreateHubPage.xaml?lat={0}&lng={1}", this.lastCoordinate.Latitude, this.lastCoordinate.Longitude), UriKind.Relative));
+            NavigationService.Navigate(new Uri("/CreateHubPage.xaml", UriKind.Relative));
         }
 
         private void Logout(object sender, EventArgs e)
@@ -154,9 +154,17 @@ namespace HubSpotr.WindowsPhone
             NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
         }
 
+        private void JoinHub(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            var selected = (HubViewModel)((HubControl)sender).DataContext;
+
+            App.Hub = selected;
+            NavigationService.Navigate(new Uri("/HubPage.xaml", UriKind.Relative));
+        }
+
         private void spNoResults_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            ApplicationBarMenuItem_Click(this, EventArgs.Empty);
+            NavigationService.Navigate(new Uri("/CreateHubPage.xaml", UriKind.Relative));
         }
     }
 }

@@ -1,58 +1,101 @@
 ﻿using HubSpotr.Core.Extensions;
 using HubSpotr.Core.Model;
+using HubSpotr.WindowsPhone.ViewModels;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Controls.Maps;
+using Microsoft.Phone.Maps.Controls;
 using Microsoft.Phone.Shell;
 using System;
 using System.Device.Location;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Windows.Devices.Geolocation;
 
 namespace HubSpotr.WindowsPhone
 {
     public partial class CreateHubPage : PhoneApplicationPage
     {
-        private GeoCoordinate coordinates;
+        private Geolocator geolocator;
 
         // http://msdn.microsoft.com/en-us/library/aa940990.aspx
-        private const double MAP_ZOOM = 15;
-        private const double MAP_CONSTANT = 4.78;
+        private const double MAP_ZOOM = 16;
+        private const double MAP_CONSTANT = 2.39;
 
         public CreateHubPage()
         {
             InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void mLocation_Loaded(object sender, RoutedEventArgs e)
         {
-            var lat = double.Parse(NavigationContext.QueryString["lat"]);
-            var lng = double.Parse(NavigationContext.QueryString["lng"]);
-
-            this.coordinates = new GeoCoordinate(lat, lng);
-
-            mLocation.SetView(this.coordinates, 15);
-            mLocation.Children.Add(new Pushpin
+            this.geolocator = new Geolocator
             {
-                Location = this.coordinates,
-                Content = new TextBlock
+                DesiredAccuracyInMeters = 10,
+                MovementThreshold = 10,
+            };
+
+            this.geolocator.PositionChanged += OnPositionChanged;
+        }
+
+        private void OnPositionChanged(Geolocator sender, PositionChangedEventArgs e)
+        {
+            var geoCoordinate = new GeoCoordinate(e.Position.Coordinate.Latitude, e.Position.Coordinate.Longitude);
+
+            Dispatcher.BeginInvoke(() =>
+            {
+                pbLoading.Visibility = Visibility.Collapsed;
+                spFields.Visibility = Visibility.Visible;
+
+                mLocation.SetView(geoCoordinate, MAP_ZOOM, MapAnimationKind.None);
+
+                mLocation.Visibility = Visibility.Visible;
+
+                if (mLocation.Layers.Count > 0)
                 {
-                    Text = "you",
-                    Foreground = (SolidColorBrush)Application.Current.Resources["HubSpotr_Pink"]
+                    var layer = mLocation.Layers[0];
+
+                    var point = layer[0];
+                    var radius = layer[0];
+
+                    point.GeoCoordinate = geoCoordinate;
+                    radius.GeoCoordinate = geoCoordinate;
+                }
+                else
+                {
+                    MapLayer pinLayer = CreateMapLayer(geoCoordinate);
+                    mLocation.Layers.Add(pinLayer);
+                }
+            });
+        }
+
+        private MapLayer CreateMapLayer(GeoCoordinate geoCoordinate)
+        {
+            var pinLayer = new MapLayer();
+            pinLayer.Add(new MapOverlay
+            {
+                GeoCoordinate = geoCoordinate,
+                PositionOrigin = new Point(.5, .5),
+                Content = new Ellipse
+                {
+                    Width = 5,
+                    Height = 5,
+                    Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Black"],
                 }
             });
 
-            mLocation.Children.Add(new Ellipse
+            pinLayer.Add(new MapOverlay
             {
-                Width = (sRadius.Value / MAP_CONSTANT) * 2,
-                Height = (sRadius.Value / MAP_CONSTANT) * 2,
-                Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Pink"],
-                Opacity = .5
+                GeoCoordinate = geoCoordinate,
+                PositionOrigin = new Point(.5, .5),
+                Content = new Ellipse
+                {
+                    Width = (sRadius.Value / MAP_CONSTANT) * 2,
+                    Height = (sRadius.Value / MAP_CONSTANT) * 2,
+                    Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Pink"],
+                    Opacity = .5
+                }
             });
-
-            base.OnNavigatedTo(e);
+            return pinLayer;
         }
 
         private async void Create(object sender, EventArgs e)
@@ -68,22 +111,18 @@ namespace HubSpotr.WindowsPhone
             var button = (ApplicationBarIconButton)sender;
             button.IsEnabled = false;
 
-            pbLoading.Visibility = Visibility.Visible;
+            var geoCoordinate = mLocation.Layers[0][0].GeoCoordinate;
 
-            await new Hub
+            App.Hub = new HubViewModel(await new Hub
             {
                 Name = tbName.Text,
                 Radius = sRadius.Value,
-                Lat = this.coordinates.Latitude,
-                Lng = this.coordinates.Longitude
-            }.Create();
-
-            pbLoading.Visibility = Visibility.Collapsed;
-
-            MessageBox.Show("Hub successfully created", "success", MessageBoxButton.OK);
+                Lat = geoCoordinate.Latitude,
+                Lng = geoCoordinate.Longitude
+            }.Create());
 
             button.IsEnabled = true;
-            NavigationService.GoBack();
+            NavigationService.Navigate(new Uri("/HubPage.xaml", UriKind.Relative));
         }
 
         private void OnRadiusChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -92,16 +131,11 @@ namespace HubSpotr.WindowsPhone
             {
                 tbRadius.Text = string.Format("radius ({0:0}m)", e.NewValue);
 
-                if(mLocation.Children.Count > 1)
-                    mLocation.Children.RemoveAt(1);
+                var layer = mLocation.Layers[0];
+                var ellipse = (Ellipse)layer[1].Content;
 
-                mLocation.Children.Add(new Ellipse
-                {
-                    Width = (e.NewValue / MAP_CONSTANT) * 2,
-                    Height = (e.NewValue / MAP_CONSTANT) * 2,
-                    Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Pink"],
-                    Opacity = .5
-                });
+                ellipse.Width = (e.NewValue / MAP_CONSTANT) * 2;
+                ellipse.Height = (e.NewValue / MAP_CONSTANT) * 2;
             }
         }
     }

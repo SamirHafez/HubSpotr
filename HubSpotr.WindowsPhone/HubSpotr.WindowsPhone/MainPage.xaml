@@ -25,8 +25,9 @@
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <Image Grid.Row="0" Source="Images\hubspot_splash.png"></Image>
-            <toolkit:PerformanceProgressBar Name="pbLoading" Foreground="{StaticResource HubSpotr_Black}" Grid.Row="1" IsIndeterminate="True"></toolkit:PerformanceProgressBar>
-            <Button Grid.Row="2" Name="bLoginF" BorderBrush="{StaticResource HubSpotr_Black}" Visibility="Collapsed" Click="NewLogin" Background="{StaticResource HubSpotr_Black}">login
+            <ProgressBar Name="pbLoading" Foreground="{StaticResource HubSpotr_Black}" Grid.Row="1" IsIndeterminate="True"></ProgressBar>
+            <Button Grid.Row="2" BorderThickness="0" BorderBrush="Transparent" Name="bLoginF" Visibility="Collapsed" Click="NewLogin">
+                <Image Source="Images\login-with-facebook.png"></Image>
             </Button>
         </Grid>
     </Grid>

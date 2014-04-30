@@ -148,4 +148,9 @@ Desktop.ini
 $RECYCLE.BIN/
 
 # Mac crap
+
+# Old 
 .DS_Store
+
+# VS2013 migration
+HubSpotr.WindowsPhone.sln.ide/*

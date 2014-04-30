@@ -1,5 +1,9 @@
-﻿using Microsoft.Phone.Controls;
+﻿using HubSpotr.Core;
+using HubSpotr.WindowsPhone.ViewModels;
+using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Microsoft.WindowsAzure.MobileServices;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Navigation;
 
@@ -12,6 +16,10 @@ namespace HubSpotr.WindowsPhone
         /// </summary>
         /// <returns>The root frame of the Phone Application.</returns>
         public PhoneApplicationFrame RootFrame { get; private set; }
+
+        public static MobileServiceClient MobileServiceClient { get { return AzureContext.Client; } }
+        public static ObservableCollection<HubViewModel> Hubs { get; set; }
+        public static HubViewModel Hub { get; set; }
 
         /// <summary>
         /// Constructor for the Application object.
@@ -26,6 +34,8 @@ namespace HubSpotr.WindowsPhone
 
             // Phone-specific initialization
             InitializePhoneApplication();
+
+            Hubs = new ObservableCollection<HubViewModel>();
 
             // Show graphics profiling information while debugging.
             if (System.Diagnostics.Debugger.IsAttached)

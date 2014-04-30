@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubSpotr.WindowsPhone.Core", "HubSpotr.WindowsPhone.Core\HubSpotr.WindowsPhone.Core.csproj", "{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}"
-EndProject
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{56EC955C-1B29-4D11-92EE-8822F330A86C}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -10,24 +10,50 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{56EC95
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubSpotr.WindowsPhone.Core", "HubSpotr.WindowsPhone.Core\HubSpotr.WindowsPhone.Core.csproj", "{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubSpotr.WindowsPhone", "HubSpotr.WindowsPhone\HubSpotr.WindowsPhone.csproj", "{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM = Debug|ARM
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|ARM = Release|ARM
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}.Debug|ARM.ActiveCfg = Debug|ARM
+		{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}.Debug|ARM.Build.0 = Debug|ARM
+		{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}.Debug|x86.ActiveCfg = Debug|x86
+		{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}.Debug|x86.Build.0 = Debug|x86
 		{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}.Release|ARM.ActiveCfg = Release|ARM
+		{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}.Release|ARM.Build.0 = Release|ARM
+		{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}.Release|x86.ActiveCfg = Release|x86
+		{F27F7B3E-CD0A-4C8E-BE8F-8796E08E3683}.Release|x86.Build.0 = Release|x86
 		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Debug|ARM.ActiveCfg = Debug|ARM
+		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Debug|ARM.Build.0 = Debug|ARM
+		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Debug|ARM.Deploy.0 = Debug|ARM
+		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Debug|x86.ActiveCfg = Debug|x86
+		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Debug|x86.Build.0 = Debug|x86
+		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Debug|x86.Deploy.0 = Debug|x86
 		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Release|ARM.ActiveCfg = Release|ARM
+		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Release|ARM.Build.0 = Release|ARM
+		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Release|ARM.Deploy.0 = Release|ARM
+		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Release|x86.ActiveCfg = Release|x86
+		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Release|x86.Build.0 = Release|x86
+		{9A93943F-9DE8-41EC-AD38-A29E345FD5C1}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

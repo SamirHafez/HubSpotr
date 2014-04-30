@@ -8,11 +8,13 @@ namespace HubSpotr.Core.Extensions
 {
     public static class HubExtensions
     {
-        public static Task Create(this Hub hub)
+        public async static Task<Hub> Create(this Hub hub)
         {
             IMobileServiceTable<Hub> hubs = AzureContext.Client.GetTable<Hub>();
 
-            return hubs.InsertAsync(hub);
+            await hubs.InsertAsync(hub);
+
+            return hub;
         }
 
         public static Task<List<Post>> NewPosts(this Hub hub, DateTime latest)

@@ -7,14 +7,17 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    d:DesignHeight="120" d:DesignWidth="480">
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    d:DesignHeight="173" d:DesignWidth="173">
+    
+    <toolkit:HubTile Title="{Binding Name}" Message="{Binding Participants}" Background="{StaticResource HubSpotr_Pink}"></toolkit:HubTile>
 
-    <Grid x:Name="LayoutRoot" Margin="12" Background="{StaticResource HubSpotr_Pink}">
+    <!--<Grid x:Name="LayoutRoot" Margin="12" Background="{StaticResource HubSpotr_Pink}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition Width=".3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center" Style="{StaticResource PhoneTextTitle2Style}"></TextBlock>
         <TextBlock Grid.Column="1" Text="{Binding Participants}" HorizontalAlignment="Center" FontSize="{StaticResource PhoneFontSizeExtraExtraLarge}" FontFamily="{StaticResource PhoneFontFamilySemiBold}"></TextBlock>
-    </Grid>
+    </Grid>-->
 </UserControl>
