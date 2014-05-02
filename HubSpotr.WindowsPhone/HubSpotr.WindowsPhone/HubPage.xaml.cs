@@ -4,7 +4,6 @@ using HubSpotr.WindowsPhone.ViewModels;
 using Microsoft.Phone.Controls;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Device.Location;
 using System.Linq;
@@ -17,8 +16,6 @@ namespace HubSpotr.WindowsPhone
 {
     public partial class HubPage : PhoneApplicationPage
     {
-        private readonly Geolocator geolocator;
-
         private Timer timer;
 
         public HubPage()
@@ -28,44 +25,33 @@ namespace HubSpotr.WindowsPhone
             InitializeComponent();
 
             tbHubName.Text = App.Hub.Name;
-
-            this.geolocator = new Geolocator
-            {
-                DesiredAccuracyInMeters = 10,
-                MovementThreshold = 10,
-            };
-
-            this.geolocator.PositionChanged += OnPositionChanged;
-            this.geolocator.StatusChanged += OnLocationStatusChanged;
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            App.Geolocator.PositionChanged += OnPositionChanged;
+
             await App.Hub.Source.Join();
 
-            List<Post> posts = await App.Hub.Source.Posts();
-
-            foreach (var post in posts)
-            {
-                post.Picture += "?width=73&height=73";
-                App.Hub.Posts.Add(new PostViewModel(post));
-            }
-
             this.timer = new Timer(QueryPosts, null, 0, 2000);
-            
+
             base.OnNavigatedTo(e);
         }
 
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            App.Geolocator.PositionChanged -= OnPositionChanged;
+
             await App.Hub.Source.Leave();
+
+            this.timer.Dispose();
 
             base.OnNavigatedFrom(e);
         }
 
         protected override void OnBackKeyPress(CancelEventArgs e)
         {
-            MessageBoxResult response = MessageBox.Show("You are about to leave this hub", "leaving", MessageBoxButton.OK);
+            MessageBoxResult response = MessageBox.Show("Are you sure you want to leave this hub?", "confirm", MessageBoxButton.OK);
 
             if (response != MessageBoxResult.OK)
                 e.Cancel = true;
@@ -75,6 +61,7 @@ namespace HubSpotr.WindowsPhone
 
         private async void QueryPosts(object state)
         {
+            //this.timer.
             PostViewModel latestPost = App.Hub.Posts.OrderByDescending(p => p.At).FirstOrDefault();
 
             List<Post> newPosts = latestPost != null ? await App.Hub.Source.NewPosts(latestPost.At) : await App.Hub.Source.Posts();
@@ -100,10 +87,11 @@ namespace HubSpotr.WindowsPhone
             double distanceToHubCenter = location.GetDistanceTo(new GeoCoordinate(App.Hub.Lat, App.Hub.Lng));
 
             if (distanceToHubCenter > App.Hub.Radius)
-            {
-                MessageBox.Show("You fell out of this hubs range", "exiting", MessageBoxButton.OK);
-                NavigationService.GoBack();
-            }
+                Dispatcher.BeginInvoke(() =>
+                {
+                    MessageBox.Show("You fell out of this hubs range. Exiting.", "out of range", MessageBoxButton.OK);
+                    NavigationService.GoBack();
+                });
         }
 
         private void Post(object sender, RoutedEventArgs e)

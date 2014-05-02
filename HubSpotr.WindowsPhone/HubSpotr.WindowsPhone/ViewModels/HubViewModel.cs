@@ -1,13 +1,14 @@
-﻿using HubSpotr.Core.Extensions;
-using HubSpotr.Core.Model;
+﻿using HubSpotr.Core.Model;
+using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace HubSpotr.WindowsPhone.ViewModels
 {
     public class HubViewModel
     {
+        private static readonly Random randomizer = new Random();
+
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -24,6 +25,8 @@ namespace HubSpotr.WindowsPhone.ViewModels
 
         public Hub Source { get; private set; }
 
+        public SolidColorBrush Color { get; set; }
+
         public HubViewModel(Hub hub)
         {
             this.Source = hub;
@@ -34,6 +37,8 @@ namespace HubSpotr.WindowsPhone.ViewModels
             this.Lng = hub.Lng;
             this.Radius = hub.Radius;
             this.Participants = hub.Participants;
+
+            this.Color = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, (byte)randomizer.Next(256), (byte)randomizer.Next(256), (byte)randomizer.Next(256)));
 
             this.Posts = new ObservableCollection<PostViewModel>();
         }

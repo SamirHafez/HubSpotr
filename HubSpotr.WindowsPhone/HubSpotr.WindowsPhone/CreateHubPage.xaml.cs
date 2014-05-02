@@ -8,6 +8,7 @@ using System;
 using System.Device.Location;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Windows.Devices.Geolocation;
 
@@ -15,8 +16,6 @@ namespace HubSpotr.WindowsPhone
 {
     public partial class CreateHubPage : PhoneApplicationPage
     {
-        private Geolocator geolocator;
-
         // http://msdn.microsoft.com/en-us/library/aa940990.aspx
         private const double MAP_ZOOM = 16;
         private const double MAP_CONSTANT = 2.39;
@@ -26,20 +25,24 @@ namespace HubSpotr.WindowsPhone
             InitializeComponent();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            App.Geolocator.PositionChanged += OnPositionChanged;
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            App.Geolocator.PositionChanged -= OnPositionChanged;
+        }
+
         private void mLocation_Loaded(object sender, RoutedEventArgs e)
         {
-            this.geolocator = new Geolocator
-            {
-                DesiredAccuracyInMeters = 10,
-                MovementThreshold = 10,
-            };
-
-            this.geolocator.PositionChanged += OnPositionChanged;
         }
 
         private void OnPositionChanged(Geolocator sender, PositionChangedEventArgs e)
         {
             var geoCoordinate = new GeoCoordinate(e.Position.Coordinate.Latitude, e.Position.Coordinate.Longitude);
+            double accuracy = e.Position.Coordinate.Accuracy;
 
             Dispatcher.BeginInvoke(() =>
             {
@@ -55,20 +58,27 @@ namespace HubSpotr.WindowsPhone
                     var layer = mLocation.Layers[0];
 
                     var point = layer[0];
-                    var radius = layer[0];
+                    var radius = layer[1];
 
                     point.GeoCoordinate = geoCoordinate;
+
+                    var pointEllipse = (Ellipse)point.Content;
+                    pointEllipse.Width = accuracy;
+                    pointEllipse.Height = accuracy;
+
                     radius.GeoCoordinate = geoCoordinate;
                 }
                 else
                 {
-                    MapLayer pinLayer = CreateMapLayer(geoCoordinate);
+                    MapLayer pinLayer = CreateMapLayer(geoCoordinate, accuracy);
                     mLocation.Layers.Add(pinLayer);
                 }
+
+                sRadius.Minimum = accuracy;
             });
         }
 
-        private MapLayer CreateMapLayer(GeoCoordinate geoCoordinate)
+        private MapLayer CreateMapLayer(GeoCoordinate geoCoordinate, double accuracy)
         {
             var pinLayer = new MapLayer();
             pinLayer.Add(new MapOverlay
@@ -77,9 +87,11 @@ namespace HubSpotr.WindowsPhone
                 PositionOrigin = new Point(.5, .5),
                 Content = new Ellipse
                 {
-                    Width = 5,
-                    Height = 5,
+                    Width = accuracy,
+                    Height = accuracy,
+                    //Fill = new RadialGradientBrush(((SolidColorBrush)Application.Current.Resources["HubSpotr_Black"]).Color, Colors.Transparent),
                     Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Black"],
+                    Opacity = .05
                 }
             });
 

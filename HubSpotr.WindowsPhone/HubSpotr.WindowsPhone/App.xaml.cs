@@ -6,6 +6,7 @@ using Microsoft.WindowsAzure.MobileServices;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Navigation;
+using Windows.Devices.Geolocation;
 
 namespace HubSpotr.WindowsPhone
 {
@@ -20,6 +21,7 @@ namespace HubSpotr.WindowsPhone
         public static MobileServiceClient MobileServiceClient { get { return AzureContext.Client; } }
         public static ObservableCollection<HubViewModel> Hubs { get; set; }
         public static HubViewModel Hub { get; set; }
+        public static Geolocator Geolocator { get; private set; }
 
         /// <summary>
         /// Constructor for the Application object.
@@ -36,6 +38,11 @@ namespace HubSpotr.WindowsPhone
             InitializePhoneApplication();
 
             Hubs = new ObservableCollection<HubViewModel>();
+            Geolocator = new Geolocator
+            {
+                DesiredAccuracy = PositionAccuracy.High,
+                MovementThreshold = 10
+            };
 
             // Show graphics profiling information while debugging.
             if (System.Diagnostics.Debugger.IsAttached)

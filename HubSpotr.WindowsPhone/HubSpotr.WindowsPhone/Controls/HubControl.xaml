@@ -9,8 +9,8 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     d:DesignHeight="173" d:DesignWidth="173">
-    
-    <toolkit:HubTile Title="{Binding Name}" Message="{Binding Participants}" Background="{StaticResource HubSpotr_Pink}"></toolkit:HubTile>
+
+    <toolkit:HubTile Title="{Binding Name}" Message="{Binding Participants}" Background="{Binding Color}"></toolkit:HubTile>
 
     <!--<Grid x:Name="LayoutRoot" Margin="12" Background="{StaticResource HubSpotr_Pink}">
         <Grid.ColumnDefinitions>

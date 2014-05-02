@@ -20,6 +20,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height=".3*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height=".1*"/>
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
@@ -32,7 +33,6 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="2" Margin="12,0,12,0">
-            <ProgressBar Name="pbLoading" IsIndeterminate="True" Foreground="{StaticResource HubSpotr_Black}"></ProgressBar>
             <StackPanel Name="spNoResults" Tap="spNoResults_Tap" Visibility="Collapsed" Margin="0,28,0,0">
                 <TextBlock Style="{StaticResource PhoneTextExtraLargeStyle}" FontFamily="Segoe WP Black" Foreground="{StaticResource HubSpotr_Black}" TextWrapping="Wrap">
                 NO HUBS WITHIN RANGE
@@ -41,14 +41,29 @@
                     TAP TO CREATE
                 </TextBlock>
             </StackPanel>
-            <ListBox ItemsSource="{Binding}" Margin="0,12,0,0">
+            <ListBox ItemsSource="{Binding}" Margin="0,12,0,0" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <toolkit:WrapPanel ItemHeight="185" ItemWidth="185" Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+
+                <!--<toolkit:HubTile Title="{Binding Name}" Message="{Binding Participants}" Background="{StaticResource HubSpotr_Pink}" Margin="0,12,0,0"></toolkit:HubTile>
+                <toolkit:HubTile Title="{Binding Name}" Message="{Binding Participants}" Background="{StaticResource HubSpotr_Pink}" Margin="0,12,0,0"></toolkit:HubTile>
+                <toolkit:HubTile Title="{Binding Name}" Message="{Binding Participants}" Background="{StaticResource HubSpotr_Pink}" Margin="0,12,0,0"></toolkit:HubTile>
+                <toolkit:HubTile Title="{Binding Name}" Message="{Binding Participants}" Background="{StaticResource HubSpotr_Pink}" Margin="0,12,0,0"></toolkit:HubTile>
+                <toolkit:HubTile Title="{Binding Name}" Message="{Binding Participants}" Background="{StaticResource HubSpotr_Pink}" Margin="0,12,0,0"></toolkit:HubTile>
+                <toolkit:HubTile Title="{Binding Name}" Message="{Binding Participants}" Background="{StaticResource HubSpotr_Pink}" Margin="0,12,0,0"></toolkit:HubTile>-->
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <control:HubControl Tap="JoinHub"></control:HubControl>
+                        <control:HubControl Tap="JoinHub" Margin="0,12,0,0"></control:HubControl>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+                
             </ListBox>
         </Grid>
+
+        <ProgressBar Grid.Row="3" Name="pbLoading" IsIndeterminate="True" Foreground="{StaticResource HubSpotr_Black}"></ProgressBar>
     </Grid>
 
     <phone:PhoneApplicationPage.ApplicationBar>

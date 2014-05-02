@@ -10,8 +10,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Device.Location;
 using System.IO.IsolatedStorage;
+using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -21,8 +21,6 @@ namespace HubSpotr.WindowsPhone
 {
     public partial class DiscoveryPage : PhoneApplicationPage
     {
-        private Geolocator geolocator;
-
         public DiscoveryPage()
         {
             this.DataContext = App.Hubs;
@@ -30,6 +28,19 @@ namespace HubSpotr.WindowsPhone
             InitializeComponent();
 
             App.Hubs.CollectionChanged += (o, e) => spNoResults.Visibility = App.Hubs.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+
+            if (App.Hubs.Count > 0)
+                pbLoading.Visibility = Visibility.Collapsed;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            App.Geolocator.PositionChanged += OnPositionChanged;
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            App.Geolocator.PositionChanged -= OnPositionChanged;
         }
 
         protected override void OnBackKeyPress(CancelEventArgs e)
@@ -44,44 +55,45 @@ namespace HubSpotr.WindowsPhone
 
         private void mLocation_Loaded(object sender, RoutedEventArgs e)
         {
-            this.geolocator = new Geolocator
-            {
-                DesiredAccuracyInMeters = 10,
-                MovementThreshold = 10,
-            };
-
-            this.geolocator.PositionChanged += OnPositionChanged;
         }
 
         private void OnPositionChanged(Geolocator sender, PositionChangedEventArgs e)
         {
             var geoCoordinate = new GeoCoordinate(e.Position.Coordinate.Latitude, e.Position.Coordinate.Longitude);
+            var accuracy = e.Position.Coordinate.Accuracy;
 
             Dispatcher.BeginInvoke(() =>
             {
-                pbLoading.Visibility = Visibility.Collapsed;
-
+                pbLoading.Visibility = Visibility.Visible;
                 mLocation.Visibility = Visibility.Visible;
 
                 mLocation.SetView(geoCoordinate, 16, MapAnimationKind.None);
 
-                mLocation.Layers.Clear();
-
-                var pinLayer = new MapLayer();
-                Pushpin p = new Pushpin();
-                pinLayer.Add(new MapOverlay
+                if (mLocation.Layers.Count > 0)
                 {
-                    GeoCoordinate = geoCoordinate,
-                    PositionOrigin = new Point(.5, .5),
-                    Content = new Ellipse
+                    var pinLayer = mLocation.Layers[0];
+                    pinLayer[0].GeoCoordinate = geoCoordinate;
+                }
+                else
+                {
+                    var pinLayer = new MapLayer();
+                    Pushpin p = new Pushpin();
+                    pinLayer.Add(new MapOverlay
                     {
-                        Width = 5,
-                        Height = 5,
-                        Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Black"],
-                    }
-                });
+                        GeoCoordinate = geoCoordinate,
+                        PositionOrigin = new Point(.5, .5),
+                        Content = new Ellipse
+                        {
+                            Width = accuracy,
+                            Height = accuracy,
+                            //Fill = new RadialGradientBrush(((SolidColorBrush)Application.Current.Resources["HubSpotr_Black"]).Color, Colors.Transparent),
+                            Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Black"],
+                            Opacity = .05
+                        }
+                    });
 
-                mLocation.Layers.Add(pinLayer);
+                    mLocation.Layers.Add(pinLayer);
+                }
 
                 var referenceHub = new Hub
                 {
@@ -95,17 +107,28 @@ namespace HubSpotr.WindowsPhone
 
         private async void RefreshHubs(Hub reference, int quantity)
         {
-            spNoResults.Visibility = Visibility.Collapsed;
-
-            List<Hub> nearHubs = await reference.NearHubs(quantity);
+            IList<HubViewModel> nearHubs = (await reference.NearHubs(quantity))
+                .Select(nh => new HubViewModel(nh))
+                .ToList();
 
             App.Hubs.Clear();
 
+            MapLayer pinLayer = null;
+            if (mLocation.Layers.Count > 1)
+            {
+                pinLayer = mLocation.Layers[1];
+                pinLayer.Clear();
+            }
+            else
+            {
+                pinLayer = new MapLayer();
+                mLocation.Layers.Add(pinLayer);
+            }
+
             foreach (var hub in nearHubs)
             {
-                App.Hubs.Add(new HubViewModel(hub));
+                App.Hubs.Add(hub);
 
-                var pinLayer = new MapLayer();
                 pinLayer.Add(new MapOverlay
                 {
                     GeoCoordinate = new GeoCoordinate(hub.Lat, hub.Lng),
@@ -114,23 +137,13 @@ namespace HubSpotr.WindowsPhone
                     {
                         Width = (hub.Radius / 2.39) * 2,
                         Height = (hub.Radius / 2.39) * 2,
-                        Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Pink"],
+                        Fill = hub.Color,
                         Opacity = .5
                     }
                 });
-                pinLayer.Add(new MapOverlay
-                {
-                    GeoCoordinate = new GeoCoordinate(hub.Lat, hub.Lng),
-                    PositionOrigin = new Point(.5, .5),
-                    Content = new TextBlock
-                    {
-                        Text = hub.Name,
-                        Foreground = new SolidColorBrush(Colors.White)
-                    }
-                });
-
-                mLocation.Layers.Add(pinLayer);
             }
+
+            pbLoading.Visibility = Visibility.Collapsed;
         }
 
         private void ApplicationBarMenuItem_Click(object sender, EventArgs e)

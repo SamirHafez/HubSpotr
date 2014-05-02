@@ -35,8 +35,8 @@
             <ProgressBar Name="pbLoading" IsIndeterminate="True" Foreground="{StaticResource HubSpotr_Black}"></ProgressBar>
             <StackPanel Name="spFields" Visibility="Collapsed" Orientation="Vertical">
                 <toolkit:PhoneTextBox BorderBrush="{StaticResource HubSpotr_Black}" Name="tbName" Hint="name"></toolkit:PhoneTextBox>
-                <TextBlock Name="tbRadius" Foreground="{StaticResource HubSpotr_Black}" Style="{StaticResource PhoneTextTitle2Style}">radius (10m)</TextBlock>
-                <Slider Name="sRadius" Minimum="50" Maximum="500" ValueChanged="OnRadiusChanged" Background="{StaticResource HubSpotr_Black}" Foreground="{StaticResource HubSpotr_Pink}" SmallChange="10" LargeChange="100"/>
+                <TextBlock Name="tbRadius" Foreground="{StaticResource HubSpotr_Black}" Style="{StaticResource PhoneTextTitle2Style}">radius (20m)</TextBlock>
+                <Slider Name="sRadius" Minimum="20" Maximum="500" ValueChanged="OnRadiusChanged" Background="{StaticResource HubSpotr_Black}" Foreground="{StaticResource HubSpotr_Pink}" SmallChange="10" LargeChange="100"/>
             </StackPanel>
         </Grid>
     </Grid>
