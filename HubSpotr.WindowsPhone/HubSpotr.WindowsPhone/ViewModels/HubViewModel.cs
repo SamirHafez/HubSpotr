@@ -52,5 +52,14 @@ namespace HubSpotr.WindowsPhone.ViewModels
         {
             return this.Id.GetHashCode();
         }
+
+        public override bool Equals(object obj)
+        {
+            var hvm = obj as HubViewModel;
+            if (hvm == null)
+                return false;
+
+            return this.Equals(hvm);
+        }
     }
 }

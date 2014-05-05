@@ -53,16 +53,17 @@ namespace HubSpotr.WindowsPhone
                 {
                     var layer = mLocation.Layers[0];
 
-                    var point = layer[0];
-                    var radius = layer[1];
+                    var dot = layer[0];
+                    var accuracyLayer = layer[1];
+                    var radius = layer[2];
 
-                    point.GeoCoordinate = geoCoordinate;
+                    dot.GeoCoordinate = geoCoordinate;
+                    accuracyLayer.GeoCoordinate = geoCoordinate;
+                    radius.GeoCoordinate = geoCoordinate;
 
-                    var pointEllipse = (Ellipse)point.Content;
+                    var pointEllipse = (Ellipse)accuracyLayer.Content;
                     pointEllipse.Width = accuracy;
                     pointEllipse.Height = accuracy;
-
-                    radius.GeoCoordinate = geoCoordinate;
                 }
                 else
                 {
@@ -83,6 +84,17 @@ namespace HubSpotr.WindowsPhone
                 PositionOrigin = new Point(.5, .5),
                 Content = new Ellipse
                 {
+                    Width = 5,
+                    Height = 5,
+                    Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Black"]
+                }
+            });
+            pinLayer.Add(new MapOverlay
+            {
+                GeoCoordinate = geoCoordinate,
+                PositionOrigin = new Point(.5, .5),
+                Content = new Ellipse
+                {
                     Width = accuracy,
                     Height = accuracy,
                     //Fill = new RadialGradientBrush(((SolidColorBrush)Application.Current.Resources["HubSpotr_Black"]).Color, Colors.Transparent),
@@ -90,7 +102,6 @@ namespace HubSpotr.WindowsPhone
                     Opacity = .05
                 }
             });
-
             pinLayer.Add(new MapOverlay
             {
                 GeoCoordinate = geoCoordinate,
@@ -140,7 +151,7 @@ namespace HubSpotr.WindowsPhone
                 tbRadius.Text = string.Format("radius ({0:0}m)", e.NewValue);
 
                 var layer = mLocation.Layers[0];
-                var ellipse = (Ellipse)layer[1].Content;
+                var ellipse = (Ellipse)layer[2].Content;
 
                 ellipse.Width = (e.NewValue / App.MAP_CONSTANT) * 2;
                 ellipse.Height = (e.NewValue / App.MAP_CONSTANT) * 2;

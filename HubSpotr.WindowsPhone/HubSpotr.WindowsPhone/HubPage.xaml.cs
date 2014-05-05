@@ -10,13 +10,14 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Navigation;
+using System.Windows.Threading;
 using Windows.Devices.Geolocation;
 
 namespace HubSpotr.WindowsPhone
 {
     public partial class HubPage : PhoneApplicationPage
     {
-        private Timer timer;
+        private DispatcherTimer timer;
 
         public HubPage()
         {
@@ -33,18 +34,22 @@ namespace HubSpotr.WindowsPhone
 
             await App.Hub.Source.Join();
 
-            this.timer = new Timer(QueryPosts, null, 0, 2000);
+            this.timer = new DispatcherTimer();
+            this.timer.Interval = new TimeSpan(0, 0, 0, 2);
+            this.timer.Tick += QueryPosts;
+            this.timer.Start();
 
             base.OnNavigatedTo(e);
         }
 
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            this.timer.Tick -= QueryPosts;
+            this.timer.Stop();
+
             App.Geolocator.PositionChanged -= OnPositionChanged;
 
             await App.Hub.Source.Leave();
-
-            this.timer.Dispose();
 
             base.OnNavigatedFrom(e);
         }
@@ -59,12 +64,21 @@ namespace HubSpotr.WindowsPhone
                 NavigationService.Navigate(new Uri("/DiscoveryPage.xaml", UriKind.Relative));
         }
 
-        private async void QueryPosts(object state)
+        private async void QueryPosts(object sender, EventArgs e)
         {
-            //this.timer.
+            this.timer.Stop();
+
             PostViewModel latestPost = App.Hub.Posts.OrderByDescending(p => p.At).FirstOrDefault();
 
-            List<Post> newPosts = latestPost != null ? await App.Hub.Source.NewPosts(latestPost.At) : await App.Hub.Source.Posts();
+            IList<Post> newPosts = Enumerable.Empty<Post>().ToList();
+            try
+            {
+                newPosts = latestPost != null ? await App.Hub.Source.NewPosts(latestPost.At) : await App.Hub.Source.Posts();
+            }
+            catch(Exception ex)
+            {
+
+            }
 
             Dispatcher.BeginInvoke(() =>
             {
@@ -73,6 +87,8 @@ namespace HubSpotr.WindowsPhone
                     post.Picture += "?width=73&height=73";
                     App.Hub.Posts.Insert(0, new PostViewModel(post));
                 }
+
+                this.timer.Start();
             });
         }
 

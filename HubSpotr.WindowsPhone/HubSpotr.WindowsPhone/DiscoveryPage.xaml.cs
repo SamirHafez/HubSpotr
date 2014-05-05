@@ -66,7 +66,7 @@ namespace HubSpotr.WindowsPhone
             {
                 pbLoading.Visibility = Visibility.Visible;
 
-                mLocation.SetView(geoCoordinate, App.MAP_ZOOM, MapAnimationKind.None);
+                mLocation.SetView(geoCoordinate, App.MAP_ZOOM);
 
                 RefreshPin(geoCoordinate, accuracy);
 
@@ -76,9 +76,17 @@ namespace HubSpotr.WindowsPhone
                     Lng = geoCoordinate.Longitude
                 };
 
-                IList<HubViewModel> nearHubs = (await mockHub.NearHubs(App.HUBS_IN_PROXIMITY))
-                    .Select(nh => new HubViewModel(nh))
-                    .ToList();
+                IList<HubViewModel> nearHubs = Enumerable.Empty<HubViewModel>().ToList();
+                try
+                {
+                    nearHubs = (await mockHub.NearHubs(App.HUBS_IN_PROXIMITY))
+                        .Select(nh => new HubViewModel(nh))
+                        .ToList();
+                }
+                catch
+                {
+                    MessageBoxResult result = MessageBox.Show("There was an error downloading the list of hubs. Please try again.", "error", MessageBoxButton.OK);
+                }
 
                 RefreshHubs(nearHubs);
 
@@ -92,6 +100,7 @@ namespace HubSpotr.WindowsPhone
             {
                 var pinLayer = mLocation.Layers[0];
                 pinLayer[0].GeoCoordinate = geoCoordinate;
+                pinLayer[1].GeoCoordinate = geoCoordinate;
 
                 var ellipse = (Ellipse)pinLayer[0].Content;
                 ellipse.Width = accuracy;
@@ -111,6 +120,17 @@ namespace HubSpotr.WindowsPhone
                         //Fill = new RadialGradientBrush(((SolidColorBrush)Application.Current.Resources["HubSpotr_Black"]).Color, Colors.Transparent),
                         Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Black"],
                         Opacity = .05
+                    }
+                });
+                pinLayer.Add(new MapOverlay
+                {
+                    GeoCoordinate = geoCoordinate,
+                    PositionOrigin = new Point(.5, .5),
+                    Content = new Ellipse
+                    {
+                        Width = 5,
+                        Height = 5,
+                        Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Black"]
                     }
                 });
 
@@ -134,9 +154,30 @@ namespace HubSpotr.WindowsPhone
             {
                 App.Hubs.Remove(deletedHub);
 
-                var hubFromLayer = hubLayer.First(hl => ((HubViewModel)((Ellipse)hl.Content).DataContext).Equals(deletedHub));
-                hubLayer.Remove(hubFromLayer);
+                if (hubLayer.Count > 0)
+                {
+                    var hubFromLayer = hubLayer.First(hl => ((HubViewModel)((Ellipse)hl.Content).DataContext).Equals(deletedHub));
+                    hubLayer.Remove(hubFromLayer);
+                }
             }
+
+            if (hubLayer.Count == 0)
+                foreach (var hub in App.Hubs)
+                {
+                    hubLayer.Add(new MapOverlay
+                    {
+                        GeoCoordinate = new GeoCoordinate(hub.Lat, hub.Lng),
+                        PositionOrigin = new Point(.5, .5),
+                        Content = new Ellipse
+                        {
+                            DataContext = hub,
+                            Width = (hub.Radius / App.MAP_CONSTANT) * 2,
+                            Height = (hub.Radius / App.MAP_CONSTANT) * 2,
+                            Fill = hub.Color,
+                            Opacity = .5
+                        }
+                    });
+                }
 
             var newHubs = nearHubs.Except(App.Hubs).ToList();
             foreach (var hub in newHubs)
