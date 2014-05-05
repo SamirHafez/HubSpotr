@@ -16,10 +16,6 @@ namespace HubSpotr.WindowsPhone
 {
     public partial class CreateHubPage : PhoneApplicationPage
     {
-        // http://msdn.microsoft.com/en-us/library/aa940990.aspx
-        private const double MAP_ZOOM = 16;
-        private const double MAP_CONSTANT = 2.39;
-
         public CreateHubPage()
         {
             InitializeComponent();
@@ -49,7 +45,7 @@ namespace HubSpotr.WindowsPhone
                 pbLoading.Visibility = Visibility.Collapsed;
                 spFields.Visibility = Visibility.Visible;
 
-                mLocation.SetView(geoCoordinate, MAP_ZOOM, MapAnimationKind.None);
+                mLocation.SetView(geoCoordinate, App.MAP_ZOOM, MapAnimationKind.None);
 
                 mLocation.Visibility = Visibility.Visible;
 
@@ -101,8 +97,8 @@ namespace HubSpotr.WindowsPhone
                 PositionOrigin = new Point(.5, .5),
                 Content = new Ellipse
                 {
-                    Width = (sRadius.Value / MAP_CONSTANT) * 2,
-                    Height = (sRadius.Value / MAP_CONSTANT) * 2,
+                    Width = (sRadius.Value / App.MAP_CONSTANT) * 2,
+                    Height = (sRadius.Value / App.MAP_CONSTANT) * 2,
                     Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Pink"],
                     Opacity = .5
                 }
@@ -146,8 +142,8 @@ namespace HubSpotr.WindowsPhone
                 var layer = mLocation.Layers[0];
                 var ellipse = (Ellipse)layer[1].Content;
 
-                ellipse.Width = (e.NewValue / MAP_CONSTANT) * 2;
-                ellipse.Height = (e.NewValue / MAP_CONSTANT) * 2;
+                ellipse.Width = (e.NewValue / App.MAP_CONSTANT) * 2;
+                ellipse.Height = (e.NewValue / App.MAP_CONSTANT) * 2;
             }
         }
     }

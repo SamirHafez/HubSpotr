@@ -23,6 +23,12 @@ namespace HubSpotr.WindowsPhone
         public static HubViewModel Hub { get; set; }
         public static Geolocator Geolocator { get; private set; }
 
+        // http://msdn.microsoft.com/en-us/library/aa940990.aspx
+        public const double MAP_ZOOM = 16;
+        public const double MAP_CONSTANT = 2.39;
+
+        public const int HUBS_IN_PROXIMITY = 10;
+
         /// <summary>
         /// Constructor for the Application object.
         /// </summary>

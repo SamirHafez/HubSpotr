@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 namespace HubSpotr.WindowsPhone.ViewModels
 {
-    public class HubViewModel
+    public class HubViewModel : IEquatable<HubViewModel>
     {
         private static readonly Random randomizer = new Random();
 
@@ -41,6 +41,16 @@ namespace HubSpotr.WindowsPhone.ViewModels
             this.Color = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, (byte)randomizer.Next(256), (byte)randomizer.Next(256), (byte)randomizer.Next(256)));
 
             this.Posts = new ObservableCollection<PostViewModel>();
+        }
+
+        public bool Equals(HubViewModel other)
+        {
+            return this.Id.Equals(other.Id);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
         }
     }
 }

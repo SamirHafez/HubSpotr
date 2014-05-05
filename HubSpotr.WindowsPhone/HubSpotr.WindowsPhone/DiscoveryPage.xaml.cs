@@ -4,7 +4,6 @@ using HubSpotr.WindowsPhone.Controls;
 using HubSpotr.WindowsPhone.ViewModels;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Maps.Controls;
-using Microsoft.Phone.Maps.Toolkit;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -55,6 +54,7 @@ namespace HubSpotr.WindowsPhone
 
         private void mLocation_Loaded(object sender, RoutedEventArgs e)
         {
+            mLocation.Visibility = Visibility.Visible;
         }
 
         private void OnPositionChanged(Geolocator sender, PositionChangedEventArgs e)
@@ -62,88 +62,101 @@ namespace HubSpotr.WindowsPhone
             var geoCoordinate = new GeoCoordinate(e.Position.Coordinate.Latitude, e.Position.Coordinate.Longitude);
             var accuracy = e.Position.Coordinate.Accuracy;
 
-            Dispatcher.BeginInvoke(() =>
+            Dispatcher.BeginInvoke(async () =>
             {
                 pbLoading.Visibility = Visibility.Visible;
-                mLocation.Visibility = Visibility.Visible;
 
-                mLocation.SetView(geoCoordinate, 16, MapAnimationKind.None);
+                mLocation.SetView(geoCoordinate, App.MAP_ZOOM, MapAnimationKind.None);
 
-                if (mLocation.Layers.Count > 0)
+                RefreshPin(geoCoordinate, accuracy);
+
+                var mockHub = new Hub
                 {
-                    var pinLayer = mLocation.Layers[0];
-                    pinLayer[0].GeoCoordinate = geoCoordinate;
-                }
-                else
-                {
-                    var pinLayer = new MapLayer();
-                    Pushpin p = new Pushpin();
-                    pinLayer.Add(new MapOverlay
-                    {
-                        GeoCoordinate = geoCoordinate,
-                        PositionOrigin = new Point(.5, .5),
-                        Content = new Ellipse
-                        {
-                            Width = accuracy,
-                            Height = accuracy,
-                            //Fill = new RadialGradientBrush(((SolidColorBrush)Application.Current.Resources["HubSpotr_Black"]).Color, Colors.Transparent),
-                            Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Black"],
-                            Opacity = .05
-                        }
-                    });
-
-                    mLocation.Layers.Add(pinLayer);
-                }
-
-                var referenceHub = new Hub
-                {
-                    Lat = e.Position.Coordinate.Latitude,
-                    Lng = e.Position.Coordinate.Longitude
+                    Lat = geoCoordinate.Latitude,
+                    Lng = geoCoordinate.Longitude
                 };
 
-                RefreshHubs(referenceHub, 10);
+                IList<HubViewModel> nearHubs = (await mockHub.NearHubs(App.HUBS_IN_PROXIMITY))
+                    .Select(nh => new HubViewModel(nh))
+                    .ToList();
+
+                RefreshHubs(nearHubs);
+
+                pbLoading.Visibility = Visibility.Collapsed;
             });
         }
 
-        private async void RefreshHubs(Hub reference, int quantity)
+        private void RefreshPin(GeoCoordinate geoCoordinate, double accuracy)
         {
-            IList<HubViewModel> nearHubs = (await reference.NearHubs(quantity))
-                .Select(nh => new HubViewModel(nh))
-                .ToList();
-
-            App.Hubs.Clear();
-
-            MapLayer pinLayer = null;
-            if (mLocation.Layers.Count > 1)
+            if (mLocation.Layers.Count > 0)
             {
-                pinLayer = mLocation.Layers[1];
-                pinLayer.Clear();
+                var pinLayer = mLocation.Layers[0];
+                pinLayer[0].GeoCoordinate = geoCoordinate;
+
+                var ellipse = (Ellipse)pinLayer[0].Content;
+                ellipse.Width = accuracy;
+                ellipse.Height = accuracy;
             }
             else
             {
-                pinLayer = new MapLayer();
+                var pinLayer = new MapLayer();
+                pinLayer.Add(new MapOverlay
+                {
+                    GeoCoordinate = geoCoordinate,
+                    PositionOrigin = new Point(.5, .5),
+                    Content = new Ellipse
+                    {
+                        Width = accuracy,
+                        Height = accuracy,
+                        //Fill = new RadialGradientBrush(((SolidColorBrush)Application.Current.Resources["HubSpotr_Black"]).Color, Colors.Transparent),
+                        Fill = (SolidColorBrush)Application.Current.Resources["HubSpotr_Black"],
+                        Opacity = .05
+                    }
+                });
+
                 mLocation.Layers.Add(pinLayer);
             }
+        }
 
-            foreach (var hub in nearHubs)
+        private void RefreshHubs(IList<HubViewModel> nearHubs)
+        {
+            MapLayer hubLayer = null;
+            if (mLocation.Layers.Count > 1)
+                hubLayer = mLocation.Layers[1];
+            else
+            {
+                hubLayer = new MapLayer();
+                mLocation.Layers.Add(hubLayer);
+            }
+
+            var deletedHubs = App.Hubs.Except(nearHubs).ToList();
+            foreach (var deletedHub in deletedHubs)
+            {
+                App.Hubs.Remove(deletedHub);
+
+                var hubFromLayer = hubLayer.First(hl => ((HubViewModel)((Ellipse)hl.Content).DataContext).Equals(deletedHub));
+                hubLayer.Remove(hubFromLayer);
+            }
+
+            var newHubs = nearHubs.Except(App.Hubs).ToList();
+            foreach (var hub in newHubs)
             {
                 App.Hubs.Add(hub);
 
-                pinLayer.Add(new MapOverlay
+                hubLayer.Add(new MapOverlay
                 {
                     GeoCoordinate = new GeoCoordinate(hub.Lat, hub.Lng),
                     PositionOrigin = new Point(.5, .5),
                     Content = new Ellipse
                     {
-                        Width = (hub.Radius / 2.39) * 2,
-                        Height = (hub.Radius / 2.39) * 2,
+                        DataContext = hub,
+                        Width = (hub.Radius / App.MAP_CONSTANT) * 2,
+                        Height = (hub.Radius / App.MAP_CONSTANT) * 2,
                         Fill = hub.Color,
                         Opacity = .5
                     }
                 });
             }
-
-            pbLoading.Visibility = Visibility.Collapsed;
         }
 
         private void ApplicationBarMenuItem_Click(object sender, EventArgs e)
