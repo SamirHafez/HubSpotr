@@ -1,6 +1,7 @@
 ﻿using HubSpotr.Core;
 using HubSpotr.WindowsPhone.ViewModels;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Notification;
 using Microsoft.Phone.Shell;
 using Microsoft.WindowsAzure.MobileServices;
 using System.Collections.ObjectModel;
@@ -22,6 +23,8 @@ namespace HubSpotr.WindowsPhone
         public static ObservableCollection<HubViewModel> Hubs { get; set; }
         public static HubViewModel Hub { get; set; }
         public static Geolocator Geolocator { get; private set; }
+
+        public static HttpNotificationChannel CurrentChannel { get; private set; }
 
         // http://msdn.microsoft.com/en-us/library/aa940990.aspx
         public const double MAP_ZOOM = 16;
@@ -69,13 +72,20 @@ namespace HubSpotr.WindowsPhone
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
-
         }
 
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            CurrentChannel = HttpNotificationChannel.Find("hubspothub");
+
+            if (CurrentChannel == null)
+            {
+                CurrentChannel = new HttpNotificationChannel("hubspothub");
+                CurrentChannel.Open();
+                CurrentChannel.BindToShellToast();
+            }
         }
 
         // Code to execute when the application is activated (brought to foreground)

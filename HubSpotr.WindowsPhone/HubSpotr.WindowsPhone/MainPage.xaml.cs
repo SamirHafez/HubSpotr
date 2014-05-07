@@ -34,7 +34,7 @@ namespace HubSpotr.WindowsPhone
             this.timer.Interval = new TimeSpan(0, 0, 0, 1);
             this.timer.Tick += TryLogin;
             this.timer.Start();
-            this.hasCredentials = HasCredentials();
+            this.hasCredentials = GetCredentials();
         }
 
         protected override void OnBackKeyPress(CancelEventArgs e)
@@ -56,7 +56,7 @@ namespace HubSpotr.WindowsPhone
             }
         }
 
-        private bool HasCredentials()
+        public static bool GetCredentials()
         {
             IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
 

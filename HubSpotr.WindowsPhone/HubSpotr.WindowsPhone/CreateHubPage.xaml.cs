@@ -127,18 +127,31 @@ namespace HubSpotr.WindowsPhone
                 return;
             }
 
+            pbLoading.Visibility = Visibility.Visible;
+            spFields.Visibility = Visibility.Collapsed;
+
             var button = (ApplicationBarIconButton)sender;
             button.IsEnabled = false;
 
             var geoCoordinate = mLocation.Layers[0][0].GeoCoordinate;
 
-            App.Hub = new HubViewModel(await new Hub
+            try
             {
-                Name = tbName.Text,
-                Radius = sRadius.Value,
-                Lat = geoCoordinate.Latitude,
-                Lng = geoCoordinate.Longitude
-            }.Create());
+                App.Hub = new HubViewModel(await new Hub
+                {
+                    Name = tbName.Text,
+                    Radius = sRadius.Value,
+                    Lat = geoCoordinate.Latitude,
+                    Lng = geoCoordinate.Longitude
+                }.Create());
+            }
+            catch
+            {
+                MessageBox.Show("There was an error creating the hub. Please try again.", "error", MessageBoxButton.OK);
+            }
+
+            pbLoading.Visibility = Visibility.Collapsed;
+            spFields.Visibility = Visibility.Visible;
 
             button.IsEnabled = true;
             NavigationService.Navigate(new Uri("/HubPage.xaml", UriKind.Relative));

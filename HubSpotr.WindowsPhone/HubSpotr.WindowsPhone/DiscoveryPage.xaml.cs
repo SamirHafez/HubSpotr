@@ -85,7 +85,7 @@ namespace HubSpotr.WindowsPhone
                 }
                 catch
                 {
-                    MessageBoxResult result = MessageBox.Show("There was an error downloading the list of hubs. Please try again.", "error", MessageBoxButton.OK);
+                    MessageBox.Show("There was an error downloading the list of hubs. Please try again.", "error", MessageBoxButton.OK);
                 }
 
                 RefreshHubs(nearHubs);
