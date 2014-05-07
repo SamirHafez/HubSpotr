@@ -217,6 +217,7 @@ namespace HubSpotr.WindowsPhone
             settings.Remove("id");
             settings.Remove("token");
             settings.Save();
+            App.MobileServiceClient.Logout();
 
             NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
         }

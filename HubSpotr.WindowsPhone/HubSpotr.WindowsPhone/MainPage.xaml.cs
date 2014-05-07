@@ -42,20 +42,6 @@ namespace HubSpotr.WindowsPhone
             Application.Current.Terminate();
         }
 
-        private void TryLogin(object sender, EventArgs e)
-        {
-            this.timer.Stop();
-            this.timer.Tick -= TryLogin;
-
-            if (hasCredentials)
-                NavigationService.Navigate(new Uri("/DiscoveryPage.xaml", UriKind.Relative));
-            else
-            {
-                pbLoading.Visibility = Visibility.Collapsed;
-                bLoginF.Visibility = Visibility.Visible;
-            }
-        }
-
         public static bool GetCredentials()
         {
             IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
@@ -74,6 +60,19 @@ namespace HubSpotr.WindowsPhone
             return true;
         }
 
+        private void TryLogin(object sender, EventArgs e)
+        {
+            this.timer.Stop();
+            this.timer.Tick -= TryLogin;
+
+            if (hasCredentials)
+                NavigationService.Navigate(new Uri("/DiscoveryPage.xaml", UriKind.Relative));
+            else
+            {
+                pbLoading.Visibility = Visibility.Collapsed;
+                bLoginF.Visibility = Visibility.Visible;
+            }
+        }
 
         private async void NewLogin(object sender, EventArgs e)
         {

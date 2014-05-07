@@ -110,7 +110,7 @@ namespace HubSpotr.WindowsPhone
 
             Dispatcher.BeginInvoke(() =>
             {
-                foreach (var post in newPosts)
+                foreach (var post in newPosts.Reverse())
                 {
                     post.Picture += "?width=73&height=73";
                     App.Hub.Posts.Insert(0, new PostViewModel(post));
