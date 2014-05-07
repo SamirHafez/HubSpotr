@@ -22,9 +22,11 @@
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="HUBSPOTR" Style="{StaticResource PhoneTextNormalStyle}" Foreground="{StaticResource HubSpotr_Pink}"/>
-            <TextBlock Text="create hub" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Foreground="{StaticResource HubSpotr_Black}"/>
+        <StackPanel Grid.Row="0" Background="{StaticResource HubSpotr_Pink}">
+            <StackPanel Margin="12,17,0,28">
+                <TextBlock Text="HUBSPOTR" Foreground="White" Style="{StaticResource PhoneTextNormalStyle}"/>
+                <TextBlock Text="create hub" Foreground="White" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            </StackPanel>
         </StackPanel>
 
         <Controls:Map Name="mLocation" Grid.Row="1" Loaded="mLocation_Loaded" Visibility="Collapsed" IsEnabled="False"/>
