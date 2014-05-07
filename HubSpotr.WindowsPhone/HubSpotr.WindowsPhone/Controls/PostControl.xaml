@@ -26,8 +26,8 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width=".65*"></ColumnDefinition>
-                    <ColumnDefinition Width=".35*"></ColumnDefinition>
+                    <ColumnDefinition Width=".45*"></ColumnDefinition>
+                    <ColumnDefinition Width=".55*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Binding Name}" TextTrimming="WordEllipsis" Style="{StaticResource PhoneTextTitle3Style}"></TextBlock>
                 <TextBlock Grid.Column="1" TextAlignment="Right" Text="{Binding At, Converter={StaticResource DateConverter}}" Style="{StaticResource PhoneTextSubtleStyle}"></TextBlock>
