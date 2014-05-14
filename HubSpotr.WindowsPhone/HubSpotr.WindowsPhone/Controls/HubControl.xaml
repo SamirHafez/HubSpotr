@@ -8,16 +8,31 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    d:DesignHeight="173" d:DesignWidth="173">
+     d:DesignWidth="310" d:DesignHeight="519">
 
-    <toolkit:HubTile Title="{Binding Name}" Message="{Binding Participants}" Background="{Binding Color}"></toolkit:HubTile>
+    <Grid Background="White" Width="310" Height="519">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width=".4*"></ColumnDefinition>
+                    <ColumnDefinition Width=".6*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Rectangle Grid.Column="0" Margin="9" Fill="{Binding Color}"></Rectangle>
+                <!--<Image Grid.Column="0" Source="https://dl.dropboxusercontent.com/u/2037914/HubSpot_Icon_01.png" Width="80" Height="80"></Image>-->
+            </Grid>
+            
+            <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" Margin="12" FontFamily="{StaticResource PhoneFontFamilyLight}" Foreground="Black" FontSize="{StaticResource PhoneFontSizeExtraLarge}"></TextBlock>
+                        
+            <!--<TextBlock Grid.Row="0" Text="{Binding Name}"></TextBlock>
+            <StackPanel Grid.Row="1">
+                <TextBlock Text="{Binding Posts[0].Message}"></TextBlock>
+            </StackPanel>-->
+        </Grid>
+    </Grid>
 
-    <!--<Grid x:Name="LayoutRoot" Margin="12" Background="{StaticResource HubSpotr_Pink}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width=".3*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center" Style="{StaticResource PhoneTextTitle2Style}"></TextBlock>
-        <TextBlock Grid.Column="1" Text="{Binding Participants}" HorizontalAlignment="Center" FontSize="{StaticResource PhoneFontSizeExtraExtraLarge}" FontFamily="{StaticResource PhoneFontFamilySemiBold}"></TextBlock>
-    </Grid>-->
+    <!--<toolkit:HubTile Size="Large" Title="{Binding Name}" Message="{Binding Participants}" Background="{Binding Color}" DisplayNotification="True" Notification="{Binding Posts[0].Message}"></toolkit:HubTile>-->
 </UserControl>

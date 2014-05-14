@@ -138,7 +138,7 @@ namespace HubSpotr.WindowsPhone
             }
         }
 
-        private void RefreshHubs(IList<HubViewModel> nearHubs)
+        private async void RefreshHubs(IList<HubViewModel> nearHubs)
         {
             MapLayer hubLayer = null;
             if (mLocation.Layers.Count > 1)
@@ -182,6 +182,10 @@ namespace HubSpotr.WindowsPhone
             var newHubs = nearHubs.Except(App.Hubs).ToList();
             foreach (var hub in newHubs)
             {
+                var posts = await hub.Source.Posts();
+                foreach (var post in posts)
+                    hub.Posts.Add(new PostViewModel(post));
+
                 App.Hubs.Add(hub);
 
                 hubLayer.Add(new MapOverlay
