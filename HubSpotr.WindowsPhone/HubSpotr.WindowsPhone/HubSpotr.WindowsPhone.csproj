@@ -102,6 +102,7 @@
     <Reference Include="Humanizer">
       <HintPath>..\packages\Humanizer.1.25.4\lib\portable-win+net40+sl50+wp8\Humanizer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Phone.Controls, Version=8.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=8.0.1.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WPtoolkit.4.2013.08.16\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
@@ -146,6 +147,7 @@
       <DependentUpon>PostControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\DateConverter.cs" />
+    <Compile Include="Converters\FacebookIdPhotoConverter.cs" />
     <Compile Include="CreateHubPage.xaml.cs">
       <DependentUpon>CreateHubPage.xaml</DependentUpon>
     </Compile>
@@ -162,6 +164,7 @@
     <Compile Include="ViewModels\HubViewModel.cs" />
     <Compile Include="ViewModels\HubViewModelCollection.cs" />
     <Compile Include="ViewModels\PostViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -228,6 +231,7 @@
   <ItemGroup>
     <Content Include="Images\appbar.cancel.rest.png" />
     <Content Include="Images\appbar.check.rest.png" />
+    <Content Include="Images\check.png" />
     <Content Include="Images\hubspot_splash.png" />
     <Content Include="Images\hubspot_tile.png" />
     <Content Include="Images\ic_launcher.png" />

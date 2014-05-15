@@ -16,9 +16,9 @@
     
     <ViewModels:HubViewModel.Posts>
         <ViewModels:PostViewModel>
-            <ViewModels:PostViewModel.Name>
-                Sam
-            </ViewModels:PostViewModel.Name>
+            <ViewModels:PostViewModel.UserId>
+                facebook:100006364205686
+            </ViewModels:PostViewModel.UserId>
             
             <ViewModels:PostViewModel.Message>
                 Hello World!
@@ -27,16 +27,12 @@
             <ViewModels:PostViewModel.At>
                 2014-02-13T13:25:00Z
             </ViewModels:PostViewModel.At>
-
-            <ViewModels:PostViewModel.Picture>
-                https://graph.facebook.com/100006364205686/picture?type=large
-            </ViewModels:PostViewModel.Picture>
         </ViewModels:PostViewModel>
 
         <ViewModels:PostViewModel>
-            <ViewModels:PostViewModel.Name>
-                Migas
-            </ViewModels:PostViewModel.Name>
+            <ViewModels:PostViewModel.UserId>
+                facebook:100000232936038
+            </ViewModels:PostViewModel.UserId>
 
             <ViewModels:PostViewModel.At>
                 2014-02-13T13:25:00Z
@@ -46,9 +42,6 @@
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada nunc a odio eleifend accumsan. Ut at neque non risus malesuada adipiscing vitae sed augue. In imperdiet dignissim dui. Pellentesque tristique imperdiet rutrum. Ut quis nisi sapien. Phasellus eu risus vitae est ullamcorper hendrerit nec id urna. Quisque venenatis in turpis in semper.
             </ViewModels:PostViewModel.Message>
 
-            <ViewModels:PostViewModel.Picture>
-                https://graph.facebook.com/100000232936038/picture?type=large
-            </ViewModels:PostViewModel.Picture>
         </ViewModels:PostViewModel>
     </ViewModels:HubViewModel.Posts>
 </ViewModels:HubViewModel>

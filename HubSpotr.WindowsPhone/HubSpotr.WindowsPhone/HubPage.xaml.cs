@@ -30,14 +30,14 @@ namespace HubSpotr.WindowsPhone
             string hubId;
             if (NavigationContext.QueryString.TryGetValue("hubId", out hubId))
             {
-                if (!MainPage.GetCredentials())
+                if (!await MainPage.GetCredentials())
                 {
                     NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
                     return;
                 }
 
-                int intHubId = int.Parse(hubId);
-                App.Hub = new HubViewModel((await App.MobileServiceClient.GetTable<Hub>().Where(h => h.Id == intHubId).Take(1).ToListAsync()).First());
+                var mockHub = new Hub { Id = int.Parse(hubId) };
+                App.Hub = new HubViewModel(await mockHub.Get());
             }
 
             this.DataContext = App.Hub;
@@ -111,10 +111,7 @@ namespace HubSpotr.WindowsPhone
             Dispatcher.BeginInvoke(() =>
             {
                 foreach (var post in newPosts.Reverse())
-                {
-                    post.Picture += "?width=90&height=90";
                     App.Hub.Posts.Insert(0, new PostViewModel(post));
-                }
 
                 pbLoading.Visibility = Visibility.Collapsed;
             });
@@ -144,11 +141,12 @@ namespace HubSpotr.WindowsPhone
             }
         }
 
-        private void Post(object sender, RoutedEventArgs e)
+        private void Post(object sender, EventArgs e)
         {
             string message = tbMessage.Text;
 
             tbMessage.Text = string.Empty;
+            lbPosts.Focus();
 
             if (message == null || (message = message.Trim()) == string.Empty)
                 return;
@@ -158,6 +156,7 @@ namespace HubSpotr.WindowsPhone
             new Post
             {
                 HubId = App.Hub.Id,
+                UserId = App.User.Id,
                 Message = message
             }.Post();
 

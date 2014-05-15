@@ -1,4 +1,6 @@
-﻿using Microsoft.Phone.Controls;
+﻿using HubSpotr.WindowsPhone.Core.Model;
+using HubSpotr.WindowsPhone.Core.Extensions;
+using Microsoft.Phone.Controls;
 using Microsoft.Phone.Net.NetworkInformation;
 using Microsoft.WindowsAzure.MobileServices;
 using System;
@@ -6,21 +8,22 @@ using System.ComponentModel;
 using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Navigation;
-using System.Windows.Threading;
+using System.Threading.Tasks;
 
 namespace HubSpotr.WindowsPhone
 {
     public partial class MainPage : PhoneApplicationPage
     {
-        private DispatcherTimer timer;
-        private bool hasCredentials;
+        private bool newLogin;
 
         public MainPage()
         {
             InitializeComponent();
+
+            newLogin = false;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
@@ -30,11 +33,13 @@ namespace HubSpotr.WindowsPhone
                 Application.Current.Terminate();
             }
 
-            this.timer = new DispatcherTimer();
-            this.timer.Interval = new TimeSpan(0, 0, 0, 1);
-            this.timer.Tick += TryLogin;
-            this.timer.Start();
-            this.hasCredentials = GetCredentials();
+            if(await GetCredentials())
+                NavigationService.Navigate(new Uri("/DiscoveryPage.xaml", UriKind.Relative));
+            else if(!newLogin)
+            {
+                pbLoading.Visibility = Visibility.Collapsed;
+                bLoginF.Visibility = Visibility.Visible;
+            }
         }
 
         protected override void OnBackKeyPress(CancelEventArgs e)
@@ -42,7 +47,7 @@ namespace HubSpotr.WindowsPhone
             Application.Current.Terminate();
         }
 
-        public static bool GetCredentials()
+        public async static Task<bool> GetCredentials()
         {
             IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
 
@@ -57,28 +62,35 @@ namespace HubSpotr.WindowsPhone
                 MobileServiceAuthenticationToken = token
             };
 
-            return true;
-        }
-
-        private void TryLogin(object sender, EventArgs e)
-        {
-            this.timer.Stop();
-            this.timer.Tick -= TryLogin;
-
-            if (hasCredentials)
-                NavigationService.Navigate(new Uri("/DiscoveryPage.xaml", UriKind.Relative));
-            else
+            var dbUser = await new User
             {
-                pbLoading.Visibility = Visibility.Collapsed;
-                bLoginF.Visibility = Visibility.Visible;
-            }
+                Id = id
+            }.Get();
+
+            if (dbUser == null)
+                return false;
+
+            App.User = new ViewModels.UserViewModel(dbUser);
+
+            return true;
         }
 
         private async void NewLogin(object sender, EventArgs e)
         {
+            pbLoading.Visibility = Visibility.Visible;
+            bLoginF.Visibility = Visibility.Collapsed;
+            newLogin = true;
+
             try
             {
                 MobileServiceUser user = await App.MobileServiceClient.LoginAsync(MobileServiceAuthenticationProvider.Facebook);
+
+                var dbUser = await new User
+                {
+                    Id = user.UserId
+                }.GetOrCreate();
+
+                App.User = new ViewModels.UserViewModel(dbUser);
 
                 IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
 
@@ -91,6 +103,9 @@ namespace HubSpotr.WindowsPhone
             catch
             {
                 MessageBox.Show("Login failed.", "Failed", MessageBoxButton.OK);
+
+                pbLoading.Visibility = Visibility.Collapsed;
+                bLoginF.Visibility = Visibility.Visible;
             }
         }
     }

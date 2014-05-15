@@ -8,13 +8,11 @@ namespace HubSpotr.WindowsPhone.ViewModels
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string UserId { get; set; }
 
         public string Message { get; set; }
 
         public DateTime At { get; set; }
-
-        public string Picture { get; set; }
 
         public int HubId { get; set; }
 
@@ -33,10 +31,9 @@ namespace HubSpotr.WindowsPhone.ViewModels
             this.Source = post;
 
             this.Id = post.Id;
-            this.Name = post.Name;
+            this.UserId = post.UserId;
             this.Message = post.Message;
             this.At = post.At;
-            this.Picture = post.Picture;
             this.HubId = post.HubId;
         }
 

@@ -107,6 +107,8 @@
     <Compile Include="..\..\HubSpotr.Android\HubSpotr.Android.Core\Model\Post.cs">
       <Link>Model\Post.cs</Link>
     </Compile>
+    <Compile Include="Extensions\UserExtensions.cs" />
+    <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -51,6 +51,20 @@ namespace HubSpotr.Core.Extensions
                        .ToListAsync();
         }
 
+        public static Task<Hub> Get(this Hub hub)
+        {
+            IMobileServiceTable<Hub> hubs = AzureContext.Client.GetTable<Hub>();
+
+            try
+            {
+                return hubs.LookupAsync(hub.Id);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static Task Join(this Hub hub)
         {
             IMobileServiceTable<Hub> hubs = AzureContext.Client.GetTable<Hub>();

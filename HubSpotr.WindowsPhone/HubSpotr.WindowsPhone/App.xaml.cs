@@ -20,6 +20,9 @@ namespace HubSpotr.WindowsPhone
         public PhoneApplicationFrame RootFrame { get; private set; }
 
         public static MobileServiceClient MobileServiceClient { get { return AzureContext.Client; } }
+
+        public static UserViewModel User { get; set; }
+
         public static ObservableCollection<HubViewModel> Hubs { get; set; }
         public static HubViewModel Hub { get; set; }
         public static Geolocator Geolocator { get; private set; }

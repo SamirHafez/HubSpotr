@@ -9,7 +9,6 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     d:DesignWidth="310" d:DesignHeight="397"
-    xmlns:local="clr-namespace:DesignDataDemo"
     d:DataContext="{d:DesignData Source=./DesignData/SampleHub.xaml}">
 
     <Grid Background="White" Width="310" Height="397">
@@ -43,11 +42,11 @@
                     <Ellipse Grid.Column="0" Width="43" Height="43" Fill="{StaticResource HubSpotr_Pink}"></Ellipse>
                     <Ellipse Grid.Column="0" Width="33" Height="33">
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="{Binding Posts[0].Picture}"></ImageBrush>
+                            <ImageBrush ImageSource="{Binding Posts[0].UserId, Converter={StaticResource FacebookIdPhotoConverter}}"></ImageBrush>
                         </Ellipse.Fill>
                     </Ellipse>
                     <StackPanel Grid.Column="1" Margin="12, 0, 0, 0">
-                        <TextBlock Text="{Binding Posts[0].Name}" Foreground="{StaticResource HubSpotr_Black}" TextTrimming="WordEllipsis" TextWrapping="Wrap"></TextBlock>
+                        <TextBlock MaxHeight="27" Text="{Binding Posts[0].UserId}" Foreground="{StaticResource HubSpotr_Black}" TextTrimming="WordEllipsis" TextWrapping="Wrap"></TextBlock>
                         <TextBlock MaxHeight="30" Text="{Binding Posts[0].Message}" TextTrimming="WordEllipsis" TextWrapping="Wrap" FontFamily="{StaticResource PhoneFontFamilyLight}" FontSize="13" Foreground="{StaticResource HubSpotr_Black}"></TextBlock>
                     </StackPanel>
                 </Grid>
@@ -60,11 +59,11 @@
                     <Ellipse Grid.Column="0" Width="43" Height="43" Fill="{StaticResource HubSpotr_Pink}"></Ellipse>
                     <Ellipse Grid.Column="0" Width="33" Height="33">
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="{Binding Posts[1].Picture}"></ImageBrush>
+                            <ImageBrush ImageSource="{Binding Posts[1].UserId, Converter={StaticResource FacebookIdPhotoConverter}}"></ImageBrush>
                         </Ellipse.Fill>
                     </Ellipse>
                     <StackPanel Grid.Column="1" Margin="12, 0, 0, 0">
-                        <TextBlock Text="{Binding Posts[1].Name}" Foreground="{StaticResource HubSpotr_Black}" TextTrimming="WordEllipsis" TextWrapping="Wrap"></TextBlock>
+                        <TextBlock MaxHeight="27" Text="{Binding Posts[1].UserId}" Foreground="{StaticResource HubSpotr_Black}" TextTrimming="WordEllipsis" TextWrapping="Wrap"></TextBlock>
                         <TextBlock MaxHeight="30" Text="{Binding Posts[1].Message}" TextTrimming="WordEllipsis" TextWrapping="Wrap" FontFamily="{StaticResource PhoneFontFamilyLight}" FontSize="13" Foreground="{StaticResource HubSpotr_Black}"></TextBlock>
                     </StackPanel>
                 </Grid>
