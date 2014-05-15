@@ -184,7 +184,10 @@ namespace HubSpotr.WindowsPhone
             {
                 var posts = await hub.Source.Posts();
                 foreach (var post in posts)
+                {
+                    post.Picture += "?width=90&height=90";
                     hub.Posts.Add(new PostViewModel(post));
+                }
 
                 App.Hubs.Add(hub);
 

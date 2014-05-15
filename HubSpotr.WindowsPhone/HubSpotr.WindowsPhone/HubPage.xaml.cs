@@ -112,7 +112,7 @@ namespace HubSpotr.WindowsPhone
             {
                 foreach (var post in newPosts.Reverse())
                 {
-                    post.Picture += "?width=73&height=73";
+                    post.Picture += "?width=90&height=90";
                     App.Hub.Posts.Insert(0, new PostViewModel(post));
                 }
 

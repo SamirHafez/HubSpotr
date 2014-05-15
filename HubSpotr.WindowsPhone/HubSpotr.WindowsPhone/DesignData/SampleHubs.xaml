@@ -24,6 +24,14 @@
                 <ViewModels:PostViewModel.Message>
                     Hello World!
                 </ViewModels:PostViewModel.Message>
+
+                <ViewModels:PostViewModel.At>
+                    2014-02-13T13:25:00Z
+                </ViewModels:PostViewModel.At>
+
+                <ViewModels:PostViewModel.Picture>
+                    https://graph.facebook.com/100006364205686/picture
+                </ViewModels:PostViewModel.Picture>
             </ViewModels:PostViewModel>
 
             <ViewModels:PostViewModel>
@@ -34,6 +42,14 @@
                 <ViewModels:PostViewModel.Message>
                     Hello world 2! This is the best software ever!
                 </ViewModels:PostViewModel.Message>
+
+                <ViewModels:PostViewModel.At>
+                    2014-02-13T13:25:00Z
+                </ViewModels:PostViewModel.At>
+
+                <ViewModels:PostViewModel.Picture>
+                    https://graph.facebook.com/100006364205686/picture
+                </ViewModels:PostViewModel.Picture>
             </ViewModels:PostViewModel>
         </ViewModels:HubViewModel.Posts>
     </ViewModels:HubViewModel>

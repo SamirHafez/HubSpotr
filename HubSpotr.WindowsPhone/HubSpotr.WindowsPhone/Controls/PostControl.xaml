@@ -8,31 +8,35 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     xmlns:converter="clr-namespace:HubSpotr.WindowsPhone.Converters"
-    d:DesignHeight="120" d:DesignWidth="480">
+    d:DesignHeight="180" d:DesignWidth="456"
+    d:DataContext="{d:DesignData Source=./DesignData/SamplePost.xaml}"
+    MinHeight="180" Width="456">
+    
     <UserControl.Resources>
         <converter:DateConverter x:Key="DateConverter"></converter:DateConverter>
     </UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot" Margin="12" Background="{StaticResource HubSpotr_Pink}">
+    <Grid x:Name="LayoutRoot" Background="White">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="73"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width=".3*"></ColumnDefinition>
+            <ColumnDefinition Width=".7*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Image Grid.Column="0" Source="{Binding Picture}" Width="73" Height="73"></Image>
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height=".3*"></RowDefinition>
                 <RowDefinition Height=".7*"></RowDefinition>
+                <RowDefinition Height=".3*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width=".45*"></ColumnDefinition>
-                    <ColumnDefinition Width=".55*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="{Binding Name}" TextTrimming="WordEllipsis" Style="{StaticResource PhoneTextTitle3Style}"></TextBlock>
-                <TextBlock Grid.Column="1" TextAlignment="Right" Text="{Binding At, Converter={StaticResource DateConverter}}" Style="{StaticResource PhoneTextSubtleStyle}"></TextBlock>
-            </Grid>
-            <TextBlock Grid.Row="1" Text="{Binding Message}" Style="{StaticResource PhoneTextSubtleStyle}"></TextBlock>
+            <Ellipse Margin="12" Grid.Row="0" Width="100" Height="100" Fill="{StaticResource HubSpotr_Pink}"></Ellipse>
+            <Ellipse Margin="12" Grid.Row="0" Width="90" Height="90">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="{Binding Picture}"></ImageBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <TextBlock Grid.Row="1" TextAlignment="Center" TextWrapping="Wrap" TextTrimming="WordEllipsis" Text="{Binding At, Converter={StaticResource DateConverter}}" Foreground="{StaticResource HubSpotr_Black}" FontSize="15" Style="{StaticResource PhoneTextSubtleStyle}"></TextBlock>
         </Grid>
+        <StackPanel Grid.Column="1">
+            <TextBlock Margin="12" Text="{Binding Name}" TextTrimming="WordEllipsis" Style="{StaticResource PhoneTextLargeStyle}" FontFamily="{StaticResource PhoneFontFamilyLight}" Foreground="{StaticResource HubSpotr_Black}"></TextBlock>
+            <TextBlock TextWrapping="Wrap" Text="{Binding Message}" Foreground="{StaticResource HubSpotr_Black}" Style="{StaticResource PhoneTextSubtleStyle}"></TextBlock>
+        </StackPanel>
     </Grid>
 </UserControl>

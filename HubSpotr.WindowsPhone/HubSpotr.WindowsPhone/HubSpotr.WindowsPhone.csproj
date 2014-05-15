@@ -191,6 +191,10 @@
     <DesignData Include="DesignData\SampleHubs.xaml">
       <SubType>Designer</SubType>
     </DesignData>
+    <Page Include="DesignData\SamplePost.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DiscoveryPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

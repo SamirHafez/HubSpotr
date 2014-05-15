@@ -1,0 +1,22 @@
+﻿<ViewModels:PostViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:ViewModels="clr-namespace:HubSpotr.WindowsPhone.ViewModels"
+    Name="Sam">
+    
+    <!--<ViewModels:PostViewModel.Name>
+        Sam
+    </ViewModels:PostViewModel.Name>-->
+    
+    <ViewModels:PostViewModel.Message>
+        This is a test message. Hello World!
+    </ViewModels:PostViewModel.Message>
+    
+    <ViewModels:PostViewModel.At>
+        2014-02-13T13:25:00Z
+    </ViewModels:PostViewModel.At>
+    
+    <ViewModels:PostViewModel.Picture>
+        https://graph.facebook.com/100006364205686/picture?type=large
+    </ViewModels:PostViewModel.Picture>
+    
+</ViewModels:PostViewModel>
