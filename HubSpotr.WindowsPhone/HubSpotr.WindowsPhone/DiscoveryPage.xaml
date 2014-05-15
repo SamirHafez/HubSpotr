@@ -12,12 +12,13 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
     xmlns:control="clr-namespace:HubSpotr.WindowsPhone.Controls"
-    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit">
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    d:DataContext="{d:DesignData Source=./DesignData/SampleHubs.xaml}">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="165"/>
             <RowDefinition Height=".3*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -27,14 +28,14 @@
             <StackPanel Margin="12,17,0,28">
                 <TextBlock Text="HUBSPOTR" Foreground="White"  Style="{StaticResource PhoneTextNormalStyle}"/>
                 <TextBlock Text="hub discovery" Foreground="White" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-                <ProgressBar Grid.Row="3" Name="pbLoading" IsIndeterminate="True" Foreground="{StaticResource HubSpotr_Black}"></ProgressBar>
+                <ProgressBar Name="pbLoading" IsIndeterminate="True" Foreground="{StaticResource HubSpotr_Black}"></ProgressBar>
             </StackPanel>
         </StackPanel>
 
         <Controls:Map Name="mLocation" Grid.Row="1" Visibility="Collapsed" Loaded="mLocation_Loaded" IsEnabled="False"/>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="2" Margin="0,0,0,0" Background="#BB2045">
+        <Grid x:Name="ContentPanel" Grid.Row="2" Background="{StaticResource HubSpotr_Pink_Dark}">
             <StackPanel Name="spNoResults" Tap="spNoResults_Tap" Visibility="Collapsed" Margin="0,28,0,0">
                 <TextBlock Style="{StaticResource PhoneTextExtraLargeStyle}" FontFamily="Segoe WP Black" Foreground="{StaticResource HubSpotr_Black}" TextWrapping="Wrap">
                 NO HUBS WITHIN RANGE
@@ -49,34 +50,6 @@
                         <toolkit:WrapPanel Orientation="Vertical"/>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
-
-                <!--<Grid Background="White" Width="280" Height="519" Margin="0,12,12,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="{Binding Name}"></TextBlock>
-                        <StackPanel Grid.Row="1">
-                            <TextBlock Text="{Binding Posts[0].Message}"></TextBlock>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
-
-                <Grid Background="White" Width="280" Height="519" Margin="0,12,12,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="{Binding Name}"></TextBlock>
-                        <StackPanel Grid.Row="1">
-                            <TextBlock Text="{Binding Posts[0].Message}"></TextBlock>
-                        </StackPanel>
-                    </Grid>
-                </Grid>-->
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <control:HubControl Tap="JoinHub" Margin="0,12,12,0"></control:HubControl>

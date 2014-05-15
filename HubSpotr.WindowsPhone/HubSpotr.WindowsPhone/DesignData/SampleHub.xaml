@@ -1,0 +1,38 @@
+﻿<ViewModels:HubViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:ViewModels="clr-namespace:HubSpotr.WindowsPhone.ViewModels">
+    
+    <ViewModels:HubViewModel.Name>
+        Estação de Santa Apolónia
+    </ViewModels:HubViewModel.Name>
+    
+    <ViewModels:HubViewModel.Color>
+        Red
+    </ViewModels:HubViewModel.Color>
+    
+    <ViewModels:HubViewModel.Radius>
+        100
+    </ViewModels:HubViewModel.Radius>
+    
+    <ViewModels:HubViewModel.Posts>
+        <ViewModels:PostViewModel>
+            <ViewModels:PostViewModel.Name>
+                Sam
+            </ViewModels:PostViewModel.Name>
+            
+            <ViewModels:PostViewModel.Message>
+                Hello World!
+            </ViewModels:PostViewModel.Message>
+        </ViewModels:PostViewModel>
+
+        <ViewModels:PostViewModel>
+            <ViewModels:PostViewModel.Name>
+                Migas
+            </ViewModels:PostViewModel.Name>
+
+            <ViewModels:PostViewModel.Message>
+                Hello world 2! This is the best software ever!
+            </ViewModels:PostViewModel.Message>
+        </ViewModels:PostViewModel>
+    </ViewModels:HubViewModel.Posts>
+</ViewModels:HubViewModel>

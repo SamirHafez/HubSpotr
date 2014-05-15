@@ -9,6 +9,7 @@
     <Application.Resources>
         <SolidColorBrush x:Key="HubSpotr_Pink" Color="#FFE51A4B"></SolidColorBrush>
         <SolidColorBrush x:Key="HubSpotr_Black" Color="#FF2B2A29"></SolidColorBrush>
+        <SolidColorBrush x:Key="HubSpotr_Pink_Dark" Color="#BB2045"></SolidColorBrush>
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>

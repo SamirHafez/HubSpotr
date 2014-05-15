@@ -39,5 +39,9 @@ namespace HubSpotr.WindowsPhone.ViewModels
             this.Picture = post.Picture;
             this.HubId = post.HubId;
         }
+
+        // FOR DESIGN PURPOSES ONLY
+        public PostViewModel()
+        { }
     }
 }

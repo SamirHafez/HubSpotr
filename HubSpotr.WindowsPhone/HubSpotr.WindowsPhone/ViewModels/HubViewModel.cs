@@ -43,6 +43,10 @@ namespace HubSpotr.WindowsPhone.ViewModels
             this.Posts = new ObservableCollection<PostViewModel>();
         }
 
+        // FOR DESIGN PURPOSES ONLY
+        public HubViewModel()
+        { }
+
         public bool Equals(HubViewModel other)
         {
             return this.Id.Equals(other.Id);
