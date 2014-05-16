@@ -1,4 +1,5 @@
-﻿using HubSpotr.Core;
+﻿using Facebook.Client;
+using HubSpotr.Core;
 using HubSpotr.WindowsPhone.ViewModels;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Notification;
@@ -20,6 +21,7 @@ namespace HubSpotr.WindowsPhone
         public PhoneApplicationFrame RootFrame { get; private set; }
 
         public static MobileServiceClient MobileServiceClient { get { return AzureContext.Client; } }
+        public static FacebookSessionClient FacebookSessionClient = new FacebookSessionClient("402390496548435");
 
         public static UserViewModel User { get; set; }
 

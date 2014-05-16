@@ -7,9 +7,15 @@ namespace HubSpotr.WindowsPhone.ViewModels
     {
         public string Id { get; set; }
 
+        public string Name { get; set; }
+
+        public string Email { get; set; }
+
         public UserViewModel(User user)
         {
             this.Id = user.Id;
+            this.Name = user.Name;
+            this.Email = user.Email;
         }
 
         // FOR DESIGN PURPOSES ONLY
