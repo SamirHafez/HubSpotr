@@ -79,7 +79,7 @@ namespace HubSpotr.WindowsPhone
                 IList<HubViewModel> nearHubs = Enumerable.Empty<HubViewModel>().ToList();
                 try
                 {
-                    nearHubs = (await mockHub.NearHubs(App.HUBS_IN_PROXIMITY))
+                    nearHubs = (await mockHub.NearHubs(App.HUBS_IN_PROXIMITY, accuracy))
                         .Select(nh => new HubViewModel(nh))
                         .ToList();
                 }

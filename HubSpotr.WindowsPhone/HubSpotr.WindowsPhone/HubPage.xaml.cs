@@ -28,7 +28,7 @@ namespace HubSpotr.WindowsPhone
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             string hubId;
-            if (NavigationContext.QueryString.TryGetValue("hubId", out hubId))
+            if (App.Hub == null && NavigationContext.QueryString.TryGetValue("hubId", out hubId))
             {
                 if (!await MainPage.GetCredentials())
                 {
@@ -57,19 +57,6 @@ namespace HubSpotr.WindowsPhone
             base.OnNavigatedTo(e);
         }
 
-        protected async override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            App.Geolocator.PositionChanged -= OnPositionChanged;
-
-            App.CurrentChannel.ChannelUriUpdated -= OnNotificationChannelEvent;
-            App.CurrentChannel.ShellToastNotificationReceived -= QueryPosts;
-            await App.MobileServiceClient.GetPush().UnregisterNativeAsync();
-
-            await App.Hub.Source.Leave();
-
-            base.OnNavigatedFrom(e);
-        }
-
         private async void OnNotificationChannelEvent(object sender, NotificationChannelUriEventArgs e)
         {
             var push = App.MobileServiceClient.GetPush();
@@ -79,14 +66,28 @@ namespace HubSpotr.WindowsPhone
                 await push.RegisterNativeAsync(App.CurrentChannel.ChannelUri.ToString(), new string[] { App.Hub.Id.ToString() });
         }
 
-        protected override void OnBackKeyPress(CancelEventArgs e)
+        protected async override void OnBackKeyPress(CancelEventArgs e)
         {
             MessageBoxResult response = MessageBox.Show("Are you sure you want to leave this hub?", "confirm", MessageBoxButton.OK);
 
             if (response != MessageBoxResult.OK)
                 e.Cancel = true;
             else
+            {
+                await ExitHub();
                 NavigationService.Navigate(new Uri("/DiscoveryPage.xaml", UriKind.Relative));
+            }
+        }
+
+        private async System.Threading.Tasks.Task ExitHub()
+        {
+            App.Geolocator.PositionChanged -= OnPositionChanged;
+
+            App.CurrentChannel.ChannelUriUpdated -= OnNotificationChannelEvent;
+            App.CurrentChannel.ShellToastNotificationReceived -= QueryPosts;
+            await App.MobileServiceClient.GetPush().UnregisterAllAsync(App.CurrentChannel.ChannelUri.ToString());
+
+            await App.Hub.Source.Leave();
         }
 
         private async void QueryPosts(object sender, Microsoft.Phone.Notification.NotificationEventArgs e)
@@ -121,18 +122,20 @@ namespace HubSpotr.WindowsPhone
         {
         }
 
-        private void OnPositionChanged(Geolocator sender, PositionChangedEventArgs e)
+        private async void OnPositionChanged(Geolocator sender, PositionChangedEventArgs e)
         {
             if (!isInRange)
                 return;
 
             GeoCoordinate location = new GeoCoordinate(e.Position.Coordinate.Latitude, e.Position.Coordinate.Longitude);
+            double accuracy = e.Position.Coordinate.Accuracy;
 
             double distanceToHubCenter = location.GetDistanceTo(new GeoCoordinate(App.Hub.Lat, App.Hub.Lng));
 
-            if (distanceToHubCenter > App.Hub.Radius)
+            if (distanceToHubCenter > (App.Hub.Radius + accuracy))
             {
                 isInRange = false;
+                await ExitHub();
                 Dispatcher.BeginInvoke(() =>
                 {
                     MessageBox.Show("You fell out of this hubs range. Exiting.", "out of range", MessageBoxButton.OK);

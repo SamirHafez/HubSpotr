@@ -13,23 +13,27 @@
 
     <Grid x:Name="LayoutRoot" Background="White">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width=".3*"></ColumnDefinition>
-            <ColumnDefinition Width=".7*"></ColumnDefinition>
+            <ColumnDefinition Width=".25*"></ColumnDefinition>
+            <ColumnDefinition Width=".75*"></ColumnDefinition>
         </Grid.ColumnDefinitions>   
         <StackPanel Grid.Column="0">
             <Grid>
-                <Ellipse Margin="12" Width="100" Height="100" Fill="{StaticResource HubSpotr_Pink}"></Ellipse>
-                <Ellipse Margin="12" Width="90" Height="90">
+                <Ellipse Margin="12" Width="90" Height="90" Fill="{StaticResource HubSpotr_Pink}"></Ellipse>
+                <Ellipse Margin="12" Width="80" Height="80">
                     <Ellipse.Fill>
                         <ImageBrush ImageSource="{Binding UserId, Converter={StaticResource FacebookIdPhotoConverter}}"></ImageBrush>
                     </Ellipse.Fill>
                 </Ellipse>
             </Grid>
-            <TextBlock TextAlignment="Center" TextWrapping="Wrap" Padding="0, 0, 0, 12" TextTrimming="WordEllipsis" Foreground="{StaticResource HubSpotr_Pink_Dark}" Text="{Binding At, Converter={StaticResource DateConverter}}" FontSize="15" Style="{StaticResource PhoneTextSubtleStyle}"></TextBlock>
+            <TextBlock TextAlignment="Center" TextWrapping="Wrap" Padding="0, 0, 0, 12" TextTrimming="WordEllipsis" Foreground="{StaticResource HubSpotr_Pink_Dark}" Text="{Binding At, Converter={StaticResource DateConverter}}" FontSize="14" Style="{StaticResource PhoneTextSubtleStyle}"></TextBlock>
         </StackPanel>
         <StackPanel Grid.Column="1">
-            <TextBlock Margin="12" Text="{Binding UserId}" TextTrimming="WordEllipsis" Style="{StaticResource PhoneTextLargeStyle}" FontFamily="{StaticResource PhoneFontFamilyLight}" Foreground="{StaticResource HubSpotr_Black}"></TextBlock>
-            <TextBlock TextWrapping="Wrap" Padding="0, 0, 0, 12" Text="{Binding Message}" Foreground="{StaticResource HubSpotr_Black}" Style="{StaticResource PhoneTextSubtleStyle}"></TextBlock>
+            <TextBlock Margin="12, 12, 12, 0" Text="{Binding UserId}" TextTrimming="WordEllipsis" Style="{StaticResource PhoneTextLargeStyle}" FontFamily="{StaticResource PhoneFontFamilyLight}" Foreground="{StaticResource HubSpotr_Black}"></TextBlock>
+            <RichTextBox TextWrapping="Wrap" TextAlignment="Justify" Padding="0, 0, 0, 12" FontSize="{StaticResource PhoneFontSizeSmall}" Foreground="{StaticResource HubSpotr_Black}">
+                <Paragraph>
+                    <Run Text="{Binding Message}"></Run>
+                </Paragraph>
+            </RichTextBox>
         </StackPanel>
     </Grid>
 </UserControl>

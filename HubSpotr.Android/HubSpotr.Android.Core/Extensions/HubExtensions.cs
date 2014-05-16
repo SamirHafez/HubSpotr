@@ -37,13 +37,14 @@ namespace HubSpotr.Core.Extensions
                         .ToListAsync();
         }
 
-        public static Task<List<Hub>> NearHubs(this Hub hub, int take = 5)
+        public static Task<List<Hub>> NearHubs(this Hub hub, int take = 5, double accuracy = 0)
         {
             IMobileServiceTable<Hub> hubs = AzureContext.Client.GetTable<Hub>();
 
             string lat = hub.Lat.ToString().Replace(',', '.');
             string lng = hub.Lng.ToString().Replace(',', '.');
-            string filter = string.Format("{0}, {1}", lat, lng);
+            string acc = accuracy.ToString().Replace(',', '.');
+            string filter = string.Format("{0}, {1}, {2}", lat, lng, acc);
 
             return hubs.Where(h => h.Filter == filter)
                        .OrderByDescending(h => h.Participants)

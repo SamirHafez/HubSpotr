@@ -55,7 +55,7 @@ namespace HubSpotr.WindowsPhone
             Geolocator = new Geolocator
             {
                 DesiredAccuracy = PositionAccuracy.High,
-                MovementThreshold = 10
+                MovementThreshold = 5
             };
 
             // Show graphics profiling information while debugging.
@@ -92,6 +92,7 @@ namespace HubSpotr.WindowsPhone
                 CurrentChannel.BindToShellToast();
             }
         }
+
 
         // Code to execute when the application is activated (brought to foreground)
         // This code will not execute when the application is first launched
