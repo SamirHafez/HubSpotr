@@ -19,7 +19,11 @@
             <ViewModels:PostViewModel.UserId>
                 facebook:100006364205686
             </ViewModels:PostViewModel.UserId>
-            
+
+            <ViewModels:PostViewModel.UserName>
+                Samir Hafez
+            </ViewModels:PostViewModel.UserName>
+
             <ViewModels:PostViewModel.Message>
                 Hello World!
             </ViewModels:PostViewModel.Message>
@@ -33,6 +37,10 @@
             <ViewModels:PostViewModel.UserId>
                 facebook:100000232936038
             </ViewModels:PostViewModel.UserId>
+
+            <ViewModels:PostViewModel.UserName>
+                Miguel Rita
+            </ViewModels:PostViewModel.UserName>
 
             <ViewModels:PostViewModel.At>
                 2014-02-13T13:25:00Z

@@ -160,6 +160,8 @@ namespace HubSpotr.WindowsPhone
             {
                 HubId = App.Hub.Id,
                 UserId = App.User.Id,
+                UserName = App.User.Name,
+                At = DateTime.UtcNow,
                 Message = message
             }.Post();
 

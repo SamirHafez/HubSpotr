@@ -6,6 +6,10 @@
         facebook:100006364205686
     </ViewModels:PostViewModel.UserId>
     
+    <ViewModels:PostViewModel.UserName>
+        Samir Hafez
+    </ViewModels:PostViewModel.UserName>
+    
     <ViewModels:PostViewModel.Message>
         This is a test message. Hello World!
     </ViewModels:PostViewModel.Message>

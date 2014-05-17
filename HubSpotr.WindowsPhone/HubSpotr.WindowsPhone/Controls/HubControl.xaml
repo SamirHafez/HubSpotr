@@ -46,7 +46,7 @@
                         </Ellipse.Fill>
                     </Ellipse>
                     <StackPanel Grid.Column="1" Margin="12, 0, 0, 0">
-                        <TextBlock MaxHeight="27" Text="{Binding Posts[0].UserId}" Foreground="{StaticResource HubSpotr_Black}" TextTrimming="WordEllipsis" TextWrapping="Wrap"></TextBlock>
+                        <TextBlock MaxHeight="27" Text="{Binding Posts[0].UserName}" Foreground="{StaticResource HubSpotr_Black}" TextTrimming="WordEllipsis" TextWrapping="Wrap"></TextBlock>
                         <TextBlock MaxHeight="30" Text="{Binding Posts[0].Message}" TextTrimming="WordEllipsis" TextWrapping="Wrap" FontFamily="{StaticResource PhoneFontFamilyLight}" FontSize="13" Foreground="{StaticResource HubSpotr_Black}"></TextBlock>
                     </StackPanel>
                 </Grid>
@@ -63,7 +63,7 @@
                         </Ellipse.Fill>
                     </Ellipse>
                     <StackPanel Grid.Column="1" Margin="12, 0, 0, 0">
-                        <TextBlock MaxHeight="27" Text="{Binding Posts[1].UserId}" Foreground="{StaticResource HubSpotr_Black}" TextTrimming="WordEllipsis" TextWrapping="Wrap"></TextBlock>
+                        <TextBlock MaxHeight="27" Text="{Binding Posts[1].UserName}" Foreground="{StaticResource HubSpotr_Black}" TextTrimming="WordEllipsis" TextWrapping="Wrap"></TextBlock>
                         <TextBlock MaxHeight="30" Text="{Binding Posts[1].Message}" TextTrimming="WordEllipsis" TextWrapping="Wrap" FontFamily="{StaticResource PhoneFontFamilyLight}" FontSize="13" Foreground="{StaticResource HubSpotr_Black}"></TextBlock>
                     </StackPanel>
                 </Grid>

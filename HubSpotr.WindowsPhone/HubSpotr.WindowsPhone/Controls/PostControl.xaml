@@ -7,9 +7,9 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    d:DesignHeight="155" d:DesignWidth="456"
+    d:DesignHeight="137" d:DesignWidth="456"
     d:DataContext="{d:DesignData Source=./DesignData/SamplePost.xaml}"
-    MinHeight="155" Width="456">
+    MinHeight="137" Width="456">
 
     <Grid x:Name="LayoutRoot" Background="White">
         <Grid.ColumnDefinitions>
@@ -18,7 +18,6 @@
         </Grid.ColumnDefinitions>   
         <StackPanel Grid.Column="0">
             <Grid>
-                <Ellipse Margin="12" Width="90" Height="90" Fill="{StaticResource HubSpotr_Pink}"></Ellipse>
                 <Ellipse Margin="12" Width="80" Height="80">
                     <Ellipse.Fill>
                         <ImageBrush ImageSource="{Binding UserId, Converter={StaticResource FacebookIdPhotoConverter}}"></ImageBrush>
@@ -28,7 +27,7 @@
             <TextBlock TextAlignment="Center" TextWrapping="Wrap" Padding="0, 0, 0, 12" TextTrimming="WordEllipsis" Foreground="{StaticResource HubSpotr_Pink_Dark}" Text="{Binding At, Converter={StaticResource DateConverter}}" FontSize="14" Style="{StaticResource PhoneTextSubtleStyle}"></TextBlock>
         </StackPanel>
         <StackPanel Grid.Column="1">
-            <TextBlock Margin="12, 12, 12, 0" Text="{Binding UserId}" TextTrimming="WordEllipsis" Style="{StaticResource PhoneTextLargeStyle}" FontFamily="{StaticResource PhoneFontFamilyLight}" Foreground="{StaticResource HubSpotr_Black}"></TextBlock>
+            <TextBlock Margin="12, 6, 12, 0" Text="{Binding UserName}" TextTrimming="WordEllipsis" Style="{StaticResource PhoneTextLargeStyle}" FontFamily="{StaticResource PhoneFontFamilyLight}" Foreground="{StaticResource HubSpotr_Black}"></TextBlock>
             <RichTextBox TextWrapping="Wrap" TextAlignment="Justify" Padding="0, 0, 0, 12" FontSize="{StaticResource PhoneFontSizeSmall}" Foreground="{StaticResource HubSpotr_Black}">
                 <Paragraph>
                     <Run Text="{Binding Message}"></Run>

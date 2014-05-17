@@ -15,6 +15,9 @@ namespace HubSpotr.Core.Model
         [DataMember(Name = "userId")]
         public string UserId { get; set; }
 
+        [DataMember(Name = "userName")]
+        public string UserName { get; set; }
+
         [DataMember(Name = "message")]
         public string Message { get; set; }
 

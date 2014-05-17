@@ -10,6 +10,8 @@ namespace HubSpotr.WindowsPhone.ViewModels
 
         public string UserId { get; set; }
 
+        public string UserName { get; set; }
+
         public string Message { get; set; }
 
         public DateTime At { get; set; }
@@ -32,6 +34,7 @@ namespace HubSpotr.WindowsPhone.ViewModels
 
             this.Id = post.Id;
             this.UserId = post.UserId;
+            this.UserName = post.UserName;
             this.Message = post.Message;
             this.At = post.At;
             this.HubId = post.HubId;
