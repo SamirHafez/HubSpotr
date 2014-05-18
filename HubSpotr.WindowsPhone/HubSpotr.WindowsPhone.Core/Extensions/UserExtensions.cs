@@ -1,10 +1,8 @@
-﻿using HubSpotr.Core;
-using HubSpotr.WindowsPhone.Core.Model;
+﻿using HubSpotr.Core.Model;
 using Microsoft.WindowsAzure.MobileServices;
-using System;
 using System.Threading.Tasks;
 
-namespace HubSpotr.WindowsPhone.Core.Extensions
+namespace HubSpotr.Core.Extensions
 {
     public static class UserExtensions
     {

@@ -1,4 +1,5 @@
-﻿using HubSpotr.Core.Extensions;
+﻿using Facebook;
+using HubSpotr.Core.Extensions;
 using HubSpotr.Core.Model;
 using HubSpotr.WindowsPhone.Controls;
 using HubSpotr.WindowsPhone.ViewModels;
@@ -22,9 +23,10 @@ namespace HubSpotr.WindowsPhone
     {
         public DiscoveryPage()
         {
-            this.DataContext = App.Hubs;
-
             InitializeComponent();
+
+            lbHubs.DataContext = App.Hubs;
+            llsFriends.DataContext = App.Friends;
 
             App.Hubs.CollectionChanged += (o, e) => spNoResults.Visibility = App.Hubs.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
 
@@ -238,6 +240,43 @@ namespace HubSpotr.WindowsPhone
         private void spNoResults_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             NavigationService.Navigate(new Uri("/CreateHubPage.xaml", UriKind.Relative));
+        }
+
+        private async void llsFriends_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var pivot = (Pivot)sender;
+            if (pivot.SelectedIndex == 1 && App.Friends.Count == 0)
+            {
+                var client = new FacebookClient(App.FacebookSessionClient.CurrentSession.AccessToken);
+                dynamic friends = await client.GetTaskAsync("me/friends");
+
+                var friendsInDb = new List<UserViewModel>();
+                foreach(var friend in friends.data)
+                {
+                    var user = new User
+                    {
+                        Id = "facebook:" + friend.id,
+                        Name = friend.name
+                    };
+
+                    user = await user.Get();
+
+                    if (user != null)
+                        friendsInDb.Add(new UserViewModel(user));
+                }
+
+                var friendsInHubs = friendsInDb.Where(f => f.Hub != null);
+                var friendsNotInHubs = friendsInDb.Except(friendsInHubs);
+
+                Dispatcher.BeginInvoke(() =>
+                {
+                    foreach (var friend in friendsInHubs.OrderBy(f => f.Hub.Distance))
+                        App.Friends.Add(friend);
+
+                    foreach (var friend in friendsNotInHubs)
+                        App.Friends.Add(friend);
+                });
+            }
         }
     }
 }

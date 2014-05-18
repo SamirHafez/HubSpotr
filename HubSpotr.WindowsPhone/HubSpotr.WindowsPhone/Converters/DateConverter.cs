@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Windows.Data;
 using Humanizer;
 
@@ -15,13 +12,6 @@ namespace HubSpotr.WindowsPhone.Converters
             var date = (DateTime)value;
 
             return date.Humanize(false);
-
-            //if (date.Date < DateTime.Today.AddDays(-1))
-            //    return string.Format("{0:d}", date);
-            //else if (date.Date < DateTime.Today)
-            //    return "yesterday";
-            //else
-            //    return string.Format("{0:t}", date);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

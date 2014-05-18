@@ -1,5 +1,5 @@
-﻿using HubSpotr.WindowsPhone.Core.Model;
-using HubSpotr.WindowsPhone.Core.Extensions;
+﻿using HubSpotr.Core.Model;
+using HubSpotr.Core.Extensions;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Net.NetworkInformation;
 using Microsoft.WindowsAzure.MobileServices;

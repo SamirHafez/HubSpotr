@@ -1,6 +1,8 @@
 ﻿using HubSpotr.Core.Model;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Device.Location;
 using System.Windows.Media;
 
 namespace HubSpotr.WindowsPhone.ViewModels
@@ -20,6 +22,16 @@ namespace HubSpotr.WindowsPhone.ViewModels
         public double Radius { get; set; }
 
         public int Participants { get; set; }
+
+        public double Distance
+        {
+            get
+            {
+                GeoCoordinate location = new GeoCoordinate(App.Position.Coordinate.Latitude, App.Position.Coordinate.Longitude);
+
+                return location.GetDistanceTo(new GeoCoordinate(Lat, Lng));
+            }
+        }
 
         public ObservableCollection<PostViewModel> Posts { get; set; }
 
@@ -65,5 +77,9 @@ namespace HubSpotr.WindowsPhone.ViewModels
 
             return this.Equals(hvm);
         }
+    }
+
+    public class HubViewModelCollection : List<HubViewModel>
+    {
     }
 }

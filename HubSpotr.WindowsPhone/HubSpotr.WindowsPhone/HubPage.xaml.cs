@@ -127,12 +127,9 @@ namespace HubSpotr.WindowsPhone
             if (!isInRange)
                 return;
 
-            GeoCoordinate location = new GeoCoordinate(e.Position.Coordinate.Latitude, e.Position.Coordinate.Longitude);
             double accuracy = e.Position.Coordinate.Accuracy;
 
-            double distanceToHubCenter = location.GetDistanceTo(new GeoCoordinate(App.Hub.Lat, App.Hub.Lng));
-
-            if (distanceToHubCenter > (App.Hub.Radius + accuracy))
+            if (App.Hub.Distance > (App.Hub.Radius + accuracy))
             {
                 isInRange = false;
                 await ExitHub();

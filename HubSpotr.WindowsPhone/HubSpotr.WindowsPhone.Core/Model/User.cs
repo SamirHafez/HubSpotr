@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace HubSpotr.WindowsPhone.Core.Model
+namespace HubSpotr.Core.Model
 {
     [DataContract]
     public sealed class User
@@ -13,5 +13,11 @@ namespace HubSpotr.WindowsPhone.Core.Model
 
         [DataMember(Name = "email")]
         public string Email { get; set; }
+
+        [DataMember(Name = "hubId")]
+        public int HubId { get; set; }
+
+        [DataMember(Name = "hub")]
+        public Hub Hub { get; set; }
     }
 }

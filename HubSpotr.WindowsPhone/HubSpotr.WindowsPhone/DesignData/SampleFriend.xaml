@@ -1,0 +1,18 @@
+﻿<ViewModels:UserViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:ViewModels="clr-namespace:HubSpotr.WindowsPhone.ViewModels"
+    Id="facebook:100000232936038" Email="mrita@uon.pt" HubId="1234">
+
+    <ViewModels:UserViewModel.Name>
+        Miguel Rita
+    </ViewModels:UserViewModel.Name>
+    
+    <ViewModels:UserViewModel.Hub>
+        <ViewModels:HubViewModel Id="1234" Lat="1" Lng="1" Color="Red">
+            <ViewModels:HubViewModel.Name>
+                Estação de Santa Apolónia
+            </ViewModels:HubViewModel.Name>
+        </ViewModels:HubViewModel>
+    </ViewModels:UserViewModel.Hub>
+
+</ViewModels:UserViewModel>

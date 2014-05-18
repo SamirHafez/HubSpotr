@@ -12,52 +12,55 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
     xmlns:control="clr-namespace:HubSpotr.WindowsPhone.Controls"
-    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    d:DataContext="{d:DesignData Source=./DesignData/SampleHubs.xaml}">
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit">
 
-    <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="165"/>
-            <RowDefinition Height=".3*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Grid x:Name="LayoutRoot" Background="{StaticResource HubSpotr_Pink}">
+        <ProgressBar Name="pbLoading" IsIndeterminate="True" Foreground="{StaticResource HubSpotr_Black}"></ProgressBar>
+        <phone:Pivot Title="hubspotr" SelectionChanged="llsFriends_SelectionChanged">
 
-        <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Background="{StaticResource HubSpotr_Pink}">
-            <StackPanel Margin="12,17,0,28">
-                <TextBlock Text="HUBSPOTR" Foreground="White"  Style="{StaticResource PhoneTextNormalStyle}"/>
-                <TextBlock Text="hub discovery" Foreground="White" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-                <ProgressBar Name="pbLoading" IsIndeterminate="True" Foreground="{StaticResource HubSpotr_Black}"></ProgressBar>
-            </StackPanel>
-        </StackPanel>
-
-        <Controls:Map Name="mLocation" Grid.Row="1" Visibility="Collapsed" Loaded="mLocation_Loaded" IsEnabled="False"/>
-
-        <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="2" Background="{StaticResource HubSpotr_Pink_Dark}">
-            <StackPanel Name="spNoResults" Tap="spNoResults_Tap" Visibility="Collapsed" Margin="0,28,0,0">
-                <TextBlock Style="{StaticResource PhoneTextExtraLargeStyle}" FontFamily="Segoe WP Black" Foreground="{StaticResource HubSpotr_Black}" TextWrapping="Wrap">
+            <phone:PivotItem Header="discovery">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=".3*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Controls:Map Name="mLocation" Grid.Row="0" Margin="-12, 0, -12, 0" Visibility="Collapsed" Loaded="mLocation_Loaded" IsEnabled="False"/>
+                    <StackPanel Name="spNoResults" Tap="spNoResults_Tap" Visibility="Collapsed" Margin="0,28,0,0">
+                        <TextBlock Style="{StaticResource PhoneTextExtraLargeStyle}" FontFamily="Segoe WP Black" Foreground="{StaticResource HubSpotr_Black}" TextWrapping="Wrap">
                 NO HUBS WITHIN RANGE
-                </TextBlock>
-                <TextBlock Style="{StaticResource PhoneTextExtraLargeStyle}" FontFamily="Segoe WP Black" Foreground="{StaticResource HubSpotr_Pink}">
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource PhoneTextExtraLargeStyle}" FontFamily="Segoe WP Black" Foreground="{StaticResource HubSpotr_Pink}">
                     TAP TO CREATE
-                </TextBlock>
-            </StackPanel>
-            <ListBox ItemsSource="{Binding}" Margin="12,12,0,12" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <toolkit:WrapPanel Orientation="Vertical"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <control:HubControl Tap="JoinHub" Margin="0,12,12,0"></control:HubControl>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                
-            </ListBox>
-        </Grid>
+                        </TextBlock>
+                    </StackPanel>
+                    <ListBox Name="lbHubs" Grid.Row="1" Width="800" d:DataContext="{d:DesignData Source=./DesignData/SampleHubs.xaml}" ItemsSource="{Binding}" Margin="12,12,0,12" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <toolkit:WrapPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <control:HubControl Tap="JoinHub" Margin="0,0,12,0"></control:HubControl>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </phone:PivotItem>
+
+            <!--Panorama item two-->
+            <phone:PivotItem Header="friends">
+                <Grid>
+                    <phone:LongListSelector Name="llsFriends"  d:DataContext="{d:DesignData Source=./DesignData/SampleFriends.xaml}" ItemsSource="{Binding}">
+                        <phone:LongListSelector.ItemTemplate>
+                            <DataTemplate>
+                                <control:FriendControl></control:FriendControl>
+                            </DataTemplate>
+                        </phone:LongListSelector.ItemTemplate>
+                    </phone:LongListSelector>
+                </Grid>
+            </phone:PivotItem>
+        </phone:Pivot>
     </Grid>
 
     <phone:PhoneApplicationPage.ApplicationBar>

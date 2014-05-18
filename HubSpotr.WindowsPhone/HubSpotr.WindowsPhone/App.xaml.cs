@@ -24,6 +24,8 @@ namespace HubSpotr.WindowsPhone
         public static FacebookSessionClient FacebookSessionClient = new FacebookSessionClient("402390496548435");
 
         public static UserViewModel User { get; set; }
+        public static Geoposition Position { get; set; }
+        public static ObservableCollection<UserViewModel> Friends { get; set; }
 
         public static ObservableCollection<HubViewModel> Hubs { get; set; }
         public static HubViewModel Hub { get; set; }
@@ -52,11 +54,14 @@ namespace HubSpotr.WindowsPhone
             InitializePhoneApplication();
 
             Hubs = new ObservableCollection<HubViewModel>();
+            Friends = new ObservableCollection<UserViewModel>();
             Geolocator = new Geolocator
             {
                 DesiredAccuracy = PositionAccuracy.High,
                 MovementThreshold = 5
             };
+
+            Geolocator.PositionChanged += (o, e) => Position = e.Position;
 
             // Show graphics profiling information while debugging.
             if (System.Diagnostics.Debugger.IsAttached)

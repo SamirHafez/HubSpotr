@@ -1,0 +1,13 @@
+﻿<ViewModels:UserViewModelCollection
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:ViewModels="clr-namespace:HubSpotr.WindowsPhone.ViewModels">
+
+    <ViewModels:UserViewModel Id="facebook:100000232936038" Email="mrita@uon.pt" Name="Miguel Rita" HubId="1234">
+        <ViewModels:UserViewModel.Hub>
+            <ViewModels:HubViewModel Id="1234" Name="Estação de Santa Apolónia" Lat="1" Lng="1" Color="Red"></ViewModels:HubViewModel>
+        </ViewModels:UserViewModel.Hub>
+    </ViewModels:UserViewModel>
+
+    <ViewModels:UserViewModel Id="facebook:100000232936038" Email="mrita@uon.pt" Name="Miguel Rita" HubId="0"/>
+
+</ViewModels:UserViewModelCollection>

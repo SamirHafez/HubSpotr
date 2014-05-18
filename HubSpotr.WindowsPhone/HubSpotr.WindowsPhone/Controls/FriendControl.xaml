@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="HubSpotr.WindowsPhone.Controls.FriendControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignHeight="125" d:DesignWidth="480"
+    d:DataContext="{d:DesignData Source=./DesignData/SampleFriend.xaml}">
+
+    <Grid Background="White" Margin="0, 0, 0, 5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".20*"></ColumnDefinition>
+            <ColumnDefinition Width=".80*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <Ellipse Margin="12" Width="60" Height="60">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="{Binding Id, Converter={StaticResource FacebookIdPhotoConverter}}"></ImageBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <TextBlock Visibility="{Binding HubId, Converter={StaticResource HideIfNoValueConverter}}" HorizontalAlignment="Center" Foreground="{StaticResource HubSpotr_Pink_Dark}" Padding="0, 0, 0, 10" Text="{Binding Hub.Distance, Converter={StaticResource DistanceConverter}}"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Name}" TextTrimming="WordEllipsis" Style="{StaticResource PhoneTextLargeStyle}" FontFamily="{StaticResource PhoneFontFamilyLight}" Foreground="{StaticResource HubSpotr_Black}"></TextBlock>
+            <StackPanel Visibility="{Binding HubId, Converter={StaticResource HideIfNoValueConverter}}" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0, 0, 15, 0">
+                <TextBlock Foreground="{StaticResource HubSpotr_Pink_Dark}" Padding="0, 0, 10, 0">@</TextBlock>
+                <TextBlock Foreground="{StaticResource HubSpotr_Black}" Text="{Binding Hub.Name}"></TextBlock>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

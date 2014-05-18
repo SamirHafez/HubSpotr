@@ -152,6 +152,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FriendControl.xaml.cs">
+      <DependentUpon>FriendControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\HubControl.xaml.cs">
       <DependentUpon>HubControl.xaml</DependentUpon>
     </Compile>
@@ -159,7 +162,9 @@
       <DependentUpon>PostControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\DateConverter.cs" />
+    <Compile Include="Converters\DistanceConverter.cs" />
     <Compile Include="Converters\FacebookIdPhotoConverter.cs" />
+    <Compile Include="Converters\HideIfNoValueConverter.cs" />
     <Compile Include="CreateHubPage.xaml.cs">
       <DependentUpon>CreateHubPage.xaml</DependentUpon>
     </Compile>
@@ -174,7 +179,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\HubViewModel.cs" />
-    <Compile Include="ViewModels\HubViewModelCollection.cs" />
     <Compile Include="ViewModels\PostViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
@@ -185,6 +189,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\FriendControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\HubControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -206,6 +214,13 @@
     <DesignData Include="DesignData\SampleHubs.xaml">
       <SubType>Designer</SubType>
     </DesignData>
+    <DesignData Include="DesignData\SampleFriend.xaml">
+      <SubType>Designer</SubType>
+    </DesignData>
+    <Page Include="DesignData\SampleFriends.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DesignData\SamplePost.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

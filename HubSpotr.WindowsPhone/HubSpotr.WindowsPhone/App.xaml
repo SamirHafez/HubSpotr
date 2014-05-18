@@ -14,6 +14,8 @@
 
         <converter:DateConverter x:Name="DateConverter"></converter:DateConverter>
         <converter:FacebookIdPhotoConverter x:Name="FacebookIdPhotoConverter"></converter:FacebookIdPhotoConverter>
+        <converter:HideIfNoValueConverter x:Name="HideIfNoValueConverter"></converter:HideIfNoValueConverter>
+        <converter:DistanceConverter x:Name="DistanceConverter"></converter:DistanceConverter>
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>
